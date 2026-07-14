@@ -1,0 +1,14 @@
+# Dependencias
+node_modules/
+
+# Secretos: las claves de API viven en .env.local, nunca en git
+.env
+.env.local
+.env.*.local
+
+# Datos de mediciones (respuestas crudas y reportes)
+data/
+
+# Sistema
+.DS_Store
+Thumbs.db

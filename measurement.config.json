@@ -1,0 +1,19 @@
+{
+  "brand": {
+    "name": "Cafés Candela",
+    "aliases": ["Candela"],
+    "domain": "cafescandela.es"
+  },
+  "competitors": [
+    { "name": "Nomad Coffee" },
+    { "name": "Puchero" },
+    { "name": "Incapto" }
+  ],
+  "prompts": [
+    "¿Cuál es el mejor café de especialidad para comprar online en España?",
+    "Recomiéndame una suscripción de café de especialidad",
+    "¿Qué tostadores de café de especialidad españoles merecen la pena?"
+  ],
+  "runsPerPrompt": 4,
+  "engine": "perplexity"
+}
