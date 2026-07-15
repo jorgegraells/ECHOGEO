@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { IBM_Plex_Mono, Instrument_Serif, Newsreader } from 'next/font/google';
 import Link from 'next/link';
 
-import { getI18n } from '@/lib/i18n';
+import { LocaleSwitcher } from '@/components/shared';
+import { getI18n, setLocale } from '@/lib/i18n';
 
 import '@/styles/globals.css';
 
@@ -55,6 +56,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <Link href="/runs/new" className="text-signal hover:text-ink">
                   {t('common.newMeasurement')}
                 </Link>
+                <LocaleSwitcher current={locale} action={setLocale} />
               </nav>
             </div>
           </header>
