@@ -41,6 +41,13 @@ verificables, sin romper el build entre uno y otro.
 
 ## Producto (después de la migración)
 
+- [x] **Crear mediciones desde la web**: formulario en `/runs/new` +
+      Server Action que valida (Zod) y lanza la medición (mock o
+      Perplexity), y redirige a su detalle.
+- [ ] **Mediciones largas en background**: hoy la Server Action corre la
+      medición síncrona; una medición real con muchos prompts tarda y no
+      escala en producción. Mover a un job runner (Trigger.dev o Inngest)
+      con estado "en curso / lista" en la UI.
 - [ ] Fórmula del Índice de Eco v1 con la varianza entre pasadas
       declarada en el propio índice, no solo en las métricas.
 - [ ] Segundo motor de IA (OpenAI Responses API con web search).

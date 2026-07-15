@@ -24,6 +24,11 @@ auditoría de citas y checks on-page. Detalle en [VISION.md](VISION.md).
 - Dashboard en `src/app/` con los componentes partidos en
   `src/components/` (ui + features/measurements) e i18n propio (es, en)
   en `src/lib/i18n/`. El idioma sale de la cookie `locale`.
+- **Bucle completo usable desde la web**: `/runs/new` tiene un formulario
+  que crea y lanza una medición vía Server Action (mock por defecto,
+  Perplexity real opcional) y redirige a su detalle. La medición corre
+  síncrona en la action; sirve en local, pero en producción las
+  mediciones reales (lentas) deben ir a un job runner (ver [TODO.md]).
 - Falta ESLint, Playwright y el selector de idioma en la UI. Resto por
   lotes en [TODO.md](TODO.md).
 

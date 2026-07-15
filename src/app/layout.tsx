@@ -49,9 +49,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 Echo<em className="italic text-signal">GEO</em>
               </Link>
               <nav className="kicker flex gap-5">
-                <span>{t('common.tagline')}</span>
                 <Link href="/" className="hover:text-ink">
                   {t('common.nav')}
+                </Link>
+                <Link href="/runs/new" className="text-signal hover:text-ink">
+                  {t('common.newMeasurement')}
                 </Link>
               </nav>
             </div>

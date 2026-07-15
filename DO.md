@@ -6,6 +6,12 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-15
 
+- **Crear mediciones desde la web**: formulario en `/runs/new`
+  (MeasurementForm, client) + Server Action `createMeasurement` que valida
+  con Zod y delega en el servicio, con motor simulado por defecto y
+  Perplexity real opcional. Cierra el bucle usable de punta a punta sin
+  terminal. Verificado en navegador: creación → redirección al detalle,
+  aparición en la lista y validación de error en el borde.
 - **Migración del dashboard al estándar**: App Router a `src/app/`, vistas
   partidas en componentes de feature (MeasurementList, MeasurementReport,
   EchoIndexPanel, PromptLog, SourceAudit) con `.tsx`/`.styles.ts`/
