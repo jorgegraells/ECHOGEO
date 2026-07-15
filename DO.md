@@ -6,6 +6,10 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-15
 
+- **Verificación de motores contra API real**: OpenAI validado end-to-end
+  (texto + citas `url_citation` correctos). Gemini respondió con auth y
+  endpoint bien, pero la clave dio 429 (cuota agotada): camino feliz sin
+  confirmar. Perplexity ya estaba validado.
 - **Lote en paralelo (4 subagentes)**: integraciones de OpenAI (Responses
   API) y Gemini (grounding) con test de parsing por fixture, registradas en
   el servicio (registro de motores) y ofrecidas en el formulario; selector

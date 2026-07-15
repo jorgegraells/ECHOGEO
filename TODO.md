@@ -55,9 +55,11 @@ verificables, sin romper el build entre uno y otro.
 - [x] Segundo motor (OpenAI Responses API) y tercer motor (Gemini con
       grounding): integraciones escritas, con test de parsing y registradas
       en el servicio y el formulario.
-- [ ] **Verificar OpenAI y Gemini contra la API real**: con sus claves,
-      confirmar el formato de request/respuesta y el modelo por defecto
-      (`gpt-5.4`, `gemini-3.5-flash` son plausibles pero sin comprobar).
+- [x] **Verificar OpenAI contra la API real**: hecho (2026-07-15), texto y
+      citas correctos con `gpt-5.4`.
+- [ ] **Verificar Gemini contra la API real**: la clave de prueba dio 429
+      (cuota agotada); el adaptador y la auth son correctos, pero falta
+      confirmar el parseo de `groundingMetadata` con una clave con cuota.
 - [ ] Checks on-page automáticos (fetch de la web + auditoría de
       citabilidad).
 - [ ] Landing pública sobre los tokens de la estación de medición.

@@ -52,13 +52,15 @@ Al empezar cada sesión: leer [TODO.md](TODO.md) y las últimas líneas de
 
 ## Motores de IA
 
-- **Perplexity Sonar** (integrado y validado contra API real): citas
-  nativas en metadatos, el más barato. Endpoint `chat/completions`.
-- **OpenAI Responses API** y **Gemini con grounding** (integrados en
-  `src/lib/integrations/`, con test de parsing por fixture, pero AÚN NO
-  verificados contra la API real: faltan `OPENAI_API_KEY` / `GEMINI_API_KEY`
-  y confirmar el formato exacto de respuesta). Registrados en el servicio
-  y ofrecidos en el formulario.
+- **Perplexity Sonar** (validado contra API real): citas nativas en
+  metadatos, el más barato. Endpoint `chat/completions`.
+- **OpenAI Responses API** (validado contra API real 2026-07-15): texto y
+  citas `url_citation` parseados correctamente. Modelo `gpt-5.4`.
+- **Gemini con grounding**: adaptador y auth correctos (la API respondió,
+  con el endpoint y el header bien), pero el camino feliz NO está
+  verificado: la clave de prueba dio 429 (cuota agotada). Falta confirmar
+  el parseo de `groundingMetadata` con una clave con cuota.
+Los tres están registrados en el servicio y ofrecidos en el formulario.
 
 ## Modelo de datos (v0, filesystem)
 
