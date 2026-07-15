@@ -20,14 +20,18 @@ verificables, sin romper el build entre uno y otro.
       como wrappers, con validación Zod de la respuesta de Perplexity.
 - [x] **Scoring → servicio**: puro y determinista en
       `measurement.scoring.ts`, con test unitario.
-- [ ] **Dashboard → `src/app/`**: mover el App Router; partir
-      `runs/[id]/page.tsx` (201 líneas) en componentes según convención
-      (`.tsx` / `.styles.ts` / `.logic.ts` / `.types.ts`). Mover
-      `app/globals.css` a `src/styles/`.
-- [ ] **i18n de la UI**: conectar next-intl y sacar todos los textos
-      hardcodeados a `src/messages/es.json` y `en.json` (claves ya creadas).
-- [ ] **`data-component`**: añadir a los componentes de UI y registrarlos
-      en [COMPONENTS.md](COMPONENTS.md).
+- [x] **Dashboard → `src/app/`**: App Router movido; `runs/[id]/page.tsx`
+      partido en componentes de feature (MeasurementList, MeasurementReport,
+      EchoIndexPanel, PromptLog, SourceAudit) con `.tsx`/`.styles.ts`/
+      `.logic.ts` e index. `globals.css` en `src/styles/`.
+- [x] **i18n de la UI**: módulo i18n propio (es, en) con traductor y
+      formato por locale; cero texto hardcodeado. Idioma por cookie
+      `locale`. *(Se puede cambiar a next-intl si hace falta reactividad
+      cliente o selector de idioma; hoy no lo necesita.)*
+- [x] **`data-component`**: añadido a los componentes y registrado en
+      [COMPONENTS.md](COMPONENTS.md).
+- [ ] **Selector de idioma**: un control en la UI que escriba la cookie
+      `locale` (hoy solo se puede cambiar a mano).
 - [ ] **ESLint**: configurar flat config con el orden de imports como regla
       y añadir `npm run lint` al checklist de commit.
 - [ ] **Playwright**: configurar el runner E2E y un primer flujo del

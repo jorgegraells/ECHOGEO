@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Mono, Instrument_Serif, Newsreader } from 'next/font/google';
 import Link from 'next/link';
-import './globals.css';
+
+import { getI18n } from '@/lib/i18n';
+
+import '@/styles/globals.css';
 
 const instrumentSerif = Instrument_Serif({
   weight: '400',
@@ -23,15 +26,19 @@ const plexMono = IBM_Plex_Mono({
   variable: '--font-plex-mono',
 });
 
-export const metadata: Metadata = {
-  title: 'EchoGEO — Estación de medición',
-  description:
-    'Mide la visibilidad de tu marca en las respuestas de los motores de IA',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+  return {
+    title: `${t('common.appName')} — ${t('common.tagline')}`,
+    description: t('common.metaDescription'),
+  };
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { locale, t } = await getI18n();
+
   return (
-    <html lang="es">
+    <html lang={locale}>
       <body
         className={`${instrumentSerif.variable} ${newsreader.variable} ${plexMono.variable} bg-paper font-body text-ink antialiased`}
       >
@@ -42,16 +49,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Echo<em className="italic text-signal">GEO</em>
               </Link>
               <nav className="kicker flex gap-5">
-                <span>Estación de medición</span>
+                <span>{t('common.tagline')}</span>
                 <Link href="/" className="hover:text-ink">
-                  Mediciones
+                  {t('common.nav')}
                 </Link>
               </nav>
             </div>
           </header>
           <main className="min-h-[70vh] pb-24">{children}</main>
           <footer className="border-t border-ink-faint py-5">
-            <p className="kicker">EchoGEO · Boletín interno · 2026</p>
+            <p className="kicker">{t('common.footer')}</p>
           </footer>
         </div>
       </body>

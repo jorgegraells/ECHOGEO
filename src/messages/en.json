@@ -1,20 +1,24 @@
 {
   "common": {
     "appName": "EchoGEO",
-    "tagline": "Measurement station"
-  },
-  "nav": {
-    "measurements": "Measurements"
+    "tagline": "Measurement station",
+    "nav": "Measurements",
+    "footer": "EchoGEO · Internal bulletin · 2026",
+    "register": "REG.",
+    "metaDescription": "Measure your brand's visibility inside AI engine answers"
   },
   "measurements": {
     "title": "Measurements",
-    "count": "{count, plural, one {# record} other {# records}}",
-    "empty": "No measurements saved yet. Run the first one from the terminal.",
-    "presenceShort": "{value} pres."
+    "count": { "one": "{count} record", "other": "{count} records" },
+    "empty": "No measurements saved yet. Run the first one from the terminal:",
+    "presence": "{value} pres.",
+    "outOfTen": "/10"
   },
   "runDetail": {
+    "crumb": "{date} · engine {engine}",
+    "queries": "{prompts} prompts × {runs} runs = {total} queries",
+    "domainSuffix": " · domain {domain}",
     "indexLabel": "Echo Index · v0",
-    "queriesSummary": "{prompts} prompts × {runs} runs = {total} queries",
     "metrics": {
       "presence": "Presence",
       "presenceHint": "appearances across {total} runs",
@@ -25,10 +29,16 @@
     },
     "byPrompt": "Log by prompt",
     "legend": "● mention with citation · ○ mention · × no mention",
+    "promptSummary": "presence {presence} · citation {citation} · {position}",
     "notPresent": "not present",
     "avgPosition": "average position {value}",
+    "runTooltip": "run {n}: {detail}",
+    "runCited": "mention at position {position}, cited",
+    "runMention": "mention at position {position}, not cited",
+    "runAbsent": "no mention",
     "sources": "Cited sources",
-    "sourcesCount": "{count} distinct domains",
+    "sourcesCount": { "one": "{count} distinct domain", "other": "{count} distinct domains" },
+    "sourceRuns": "{count}/{total} runs",
     "sourcesEmpty": "The engine returned no sources for this measurement.",
     "ownDomain": "Your domain"
   }

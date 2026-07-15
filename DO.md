@@ -6,6 +6,12 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-15
 
+- **Migración del dashboard al estándar**: App Router a `src/app/`, vistas
+  partidas en componentes de feature (MeasurementList, MeasurementReport,
+  EchoIndexPanel, PromptLog, SourceAudit) con `.tsx`/`.styles.ts`/
+  `.logic.ts`. i18n propio (es, en) con formato por locale y cero texto
+  hardcodeado; idioma por cookie `locale`. `data-component` en cada
+  componente. Verificado en navegador en ambos idiomas, sin regresión.
 - **Migración del motor al estándar**: partido en
   `src/lib/services/measurement/` (service, repository, scoring,
   validation con Zod, errores tipados) e integraciones en

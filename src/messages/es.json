@@ -1,20 +1,24 @@
 {
   "common": {
     "appName": "EchoGEO",
-    "tagline": "Estación de medición"
-  },
-  "nav": {
-    "measurements": "Mediciones"
+    "tagline": "Estación de medición",
+    "nav": "Mediciones",
+    "footer": "EchoGEO · Boletín interno · 2026",
+    "register": "REG.",
+    "metaDescription": "Mide la visibilidad de tu marca en las respuestas de los motores de IA"
   },
   "measurements": {
     "title": "Mediciones",
-    "count": "{count, plural, one {# registro} other {# registros}}",
-    "empty": "Aún no hay mediciones guardadas. Lanza la primera desde la terminal.",
-    "presenceShort": "{value} pres."
+    "count": { "one": "{count} registro", "other": "{count} registros" },
+    "empty": "Aún no hay mediciones guardadas. Lanza la primera desde la terminal:",
+    "presence": "{value} pres.",
+    "outOfTen": "/10"
   },
   "runDetail": {
+    "crumb": "{date} · motor {engine}",
+    "queries": "{prompts} prompts × {runs} pasadas = {total} consultas",
+    "domainSuffix": " · dominio {domain}",
     "indexLabel": "Índice de Eco · v0",
-    "queriesSummary": "{prompts} prompts × {runs} pasadas = {total} consultas",
     "metrics": {
       "presence": "Presencia",
       "presenceHint": "apariciones en {total} pasadas",
@@ -25,10 +29,16 @@
     },
     "byPrompt": "Registro por prompt",
     "legend": "● mención con cita · ○ mención · × sin mención",
+    "promptSummary": "presencia {presence} · cita {citation} · {position}",
     "notPresent": "no aparece",
     "avgPosition": "posición media {value}",
+    "runTooltip": "pasada {n}: {detail}",
+    "runCited": "mención en posición {position}, con cita",
+    "runMention": "mención en posición {position}, sin cita",
+    "runAbsent": "sin mención",
     "sources": "Fuentes citadas",
-    "sourcesCount": "{count} dominios distintos",
+    "sourcesCount": { "one": "{count} dominio distinto", "other": "{count} dominios distintos" },
+    "sourceRuns": "{count}/{total} pasadas",
     "sourcesEmpty": "El motor no devolvió fuentes en esta medición.",
     "ownDomain": "Tu dominio"
   }

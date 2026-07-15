@@ -4,16 +4,16 @@ Identificadores `data-component` para localizar cualquier elemento de UI
 desde las devtools. Convención: kebab-case en inglés. Cada componente con
 entidad propia lleva su `data-component` y se registra aquí.
 
-> Todavía vacío en la práctica: el dashboard actual (`app/`) se creó antes
-> de esta convención y aún no lleva `data-component`. Se irán registrando
-> al migrar cada vista a la estructura y convención de componentes (ver
-> [TODO.md](TODO.md)).
-
 ## Registro
 
 | data-component | Ubicación | Descripción |
 |---|---|---|
-| _(pendiente)_ | — | — |
+| `section-heading` | `src/components/ui/SectionHeading` | Cabecera de sección: código de registro, título e info lateral |
+| `measurement-list` | `src/components/features/measurements/MeasurementList` | Lista de mediciones guardadas con su Índice de Eco |
+| `measurement-report` | `src/components/features/measurements/MeasurementReport` | Boletín completo de una medición |
+| `echo-index-panel` | `src/components/features/measurements/EchoIndexPanel` | Índice de Eco compuesto y su desglose |
+| `prompt-log` | `src/components/features/measurements/PromptLog` | Registro por prompt y estado de cada pasada |
+| `source-audit` | `src/components/features/measurements/SourceAudit` | Auditoría de fuentes citadas |
 
 ## Cómo registrar uno
 

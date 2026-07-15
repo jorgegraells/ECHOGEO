@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { parseMeasurementConfig, runMeasurement } from '@/lib/services/measurement';
-import { loadEnvLocal } from '@/lib/utils';
+import { loadEnvLocal } from '@/lib/utils/env';
 
 import { printReport } from './report';
 
