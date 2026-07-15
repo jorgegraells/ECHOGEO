@@ -10,29 +10,30 @@ El motor y el dashboard funcionan pero no cumplen la estructura ni las
 convenciones de [CLAUDE.md](CLAUDE.md). Migrar en lotes pequeños y
 verificables, sin romper el build entre uno y otro.
 
-- [ ] **Andamiaje base**: mover a `src/` la estructura de carpetas
-      (`components/`, `lib/`, `types/`, `messages/`, `styles/`), configurar
-      alias `@/…`, orden de imports (ESLint/Prettier), Vitest y Playwright,
-      y la infraestructura i18n (es, en). *(Parcial: hecho el andamiaje de
-      config; falta mover el código.)*
-- [ ] **Motor → `src/lib/services/measurement/`**: partir en
-      `measurement.service.ts`, `measurement.repository.ts` (lee/escribe
-      `data/runs/`), `measurement.validation.ts` (Zod), `measurement.types.ts`,
-      `measurement.errors.ts`, `index.ts`. Sustituir los
-      `throw new Error('string')` por errores tipados.
-- [ ] **Adaptadores de IA → `src/lib/integrations/`**: Perplexity y el
-      mock como wrappers, con validación Zod de la respuesta cruda.
-- [ ] **Scoring → servicio o `lib`**: mantener la pureza y determinismo;
-      añadir tests unitarios (es lo primero que debe tener test).
+- [x] **Andamiaje base**: estructura `src/`, alias `@/…`, orden de imports
+      (Prettier), Vitest, i18n (es, en). *(Falta config de ESLint y de
+      Playwright; ver más abajo.)*
+- [x] **Motor → `src/lib/services/measurement/`**: partido en service,
+      repository, scoring, validation (Zod), types, errors e index. Errores
+      tipados en vez de strings.
+- [x] **Adaptadores de IA → `src/lib/integrations/`**: Perplexity y mock
+      como wrappers, con validación Zod de la respuesta de Perplexity.
+- [x] **Scoring → servicio**: puro y determinista en
+      `measurement.scoring.ts`, con test unitario.
 - [ ] **Dashboard → `src/app/`**: mover el App Router; partir
       `runs/[id]/page.tsx` (201 líneas) en componentes según convención
-      (`.tsx` / `.styles.ts` / `.logic.ts` / `.types.ts`).
-- [ ] **i18n de la UI**: sacar todos los textos hardcodeados a
-      `messages/es.json` y `messages/en.json`.
+      (`.tsx` / `.styles.ts` / `.logic.ts` / `.types.ts`). Mover
+      `app/globals.css` a `src/styles/`.
+- [ ] **i18n de la UI**: conectar next-intl y sacar todos los textos
+      hardcodeados a `src/messages/es.json` y `en.json` (claves ya creadas).
 - [ ] **`data-component`**: añadir a los componentes de UI y registrarlos
       en [COMPONENTS.md](COMPONENTS.md).
-- [ ] **Tests**: cubrir scoring, servicios y parseo de adaptadores según
-      [TEST.md](TEST.md); un flujo E2E del dashboard.
+- [ ] **ESLint**: configurar flat config con el orden de imports como regla
+      y añadir `npm run lint` al checklist de commit.
+- [ ] **Playwright**: configurar el runner E2E y un primer flujo del
+      dashboard.
+- [ ] **Más tests**: cubrir el parseo de la integración de Perplexity con
+      fixtures de crudo, y la validación Zod, según [TEST.md](TEST.md).
 
 ## Producto (después de la migración)
 

@@ -1,10 +1,4 @@
-import type {
-  BrandSpec,
-  MeasurementFile,
-  PromptScore,
-  Report,
-  RunScore,
-} from './types.js';
+import type { BrandSpec, MeasurementFile, PromptScore, Report, RunScore } from '@/types';
 
 // Scoring determinista v0. La promesa del producto: con las mismas
 // respuestas crudas, el mismo resultado, siempre. Si esta fórmula cambia,
@@ -15,7 +9,7 @@ import type {
 //   cita_enlazada:  en cuántas pasadas el dominio propio está en las fuentes
 //   posición:       qué lugar ocupa entre las marcas mencionadas (1.º = 1,0)
 
-/** Normaliza para comparar: minúsculas y sin acentos */
+/** Normaliza para comparar: minúsculas y sin acentos. */
 function normalize(text: string): string {
   return text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
@@ -24,20 +18,24 @@ function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-/** Índice de la primera aparición de la marca (o alias) en el texto; -1 si no está */
+/** Índice de la primera aparición de la marca (o alias) en el texto; -1 si no está. */
 function firstMentionIndex(text: string, brand: BrandSpec): number {
   const haystack = normalize(text);
   const needles = [brand.name, ...(brand.aliases ?? [])].map(normalize);
   let best = -1;
   for (const needle of needles) {
     if (!needle) continue;
-    const re = new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegExp(needle)}(?![\\p{L}\\p{N}])`, 'u');
+    const re = new RegExp(
+      `(?<![\\p{L}\\p{N}])${escapeRegExp(needle)}(?![\\p{L}\\p{N}])`,
+      'u',
+    );
     const m = re.exec(haystack);
     if (m && (best === -1 || m.index < best)) best = m.index;
   }
   return best;
 }
 
+/** El dominio propio aparece entre las fuentes citadas (también en subdominios). */
 function domainInCitations(citations: string[], domain: string | undefined): boolean {
   if (!domain) return false;
   const target = normalize(domain).replace(/^www\./, '');
@@ -51,6 +49,7 @@ function domainInCitations(citations: string[], domain: string | undefined): boo
   });
 }
 
+/** Puntúa una medición a partir de su fichero crudo. Función pura. */
 export function scoreMeasurement(file: MeasurementFile): Report {
   const { config, runs } = file;
   const allBrands = [config.brand, ...config.competitors];
@@ -100,9 +99,7 @@ export function scoreMeasurement(file: MeasurementFile): Report {
     if (s.brandsMentioned <= 1) return 1;
     return 1 - (s.position - 1) / (s.brandsMentioned - 1);
   });
-  const positionScore = total
-    ? positionScores.reduce((a, b) => a + b, 0) / total
-    : 0;
+  const positionScore = total ? positionScores.reduce((a, b) => a + b, 0) / total : 0;
 
   const index10 =
     Math.round(10 * (0.5 * presence + 0.3 * domainCited + 0.2 * positionScore) * 10) / 10;

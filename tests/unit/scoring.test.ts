@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { scoreMeasurement } from '../../src/scoring';
-import type { MeasurementConfig, MeasurementFile, RunRecord } from '../../src/types';
+import { scoreMeasurement } from '@/lib/services/measurement/measurement.scoring';
+import type { MeasurementConfig, MeasurementFile, RunRecord } from '@/types';
 
 // Construye una medición con respuestas controladas para verificar el
 // scoring de forma determinista, sin llamar a ningún motor de IA.

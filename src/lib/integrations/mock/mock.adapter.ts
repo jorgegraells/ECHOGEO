@@ -1,9 +1,10 @@
-import type { EngineAdapter, EngineAnswer, MeasurementConfig } from '../types.js';
+import type { EngineAdapter, MeasurementConfig } from '@/types';
 
 // Motor simulado: valida la tubería completa (consulta → crudo → scoring →
 // reporte) sin gastar créditos de API. Determinista: mismas entradas,
 // misma salida, para que los tests y las verificaciones sean estables.
 
+/** Hash FNV-1a de 32 bits: siembra pseudoaleatoria estable por prompt. */
 function hash(str: string): number {
   let h = 2166136261;
   for (let i = 0; i < str.length; i++) {
@@ -13,15 +14,16 @@ function hash(str: string): number {
   return h >>> 0;
 }
 
+/** Crea un adaptador simulado a partir de la config, para pruebas sin coste. */
 export function createMockAdapter(config: MeasurementConfig): EngineAdapter {
   return {
     id: 'mock',
-    async query(prompt: string, runIndex: number): Promise<EngineAnswer> {
+    async query(prompt, runIndex) {
       const seed = hash(`${prompt}::${runIndex}`);
       const brand = config.brand.name;
       const competitors = config.competitors.map((c) => c.name);
 
-      // Aparición de la marca en ~60% de las pasadas, para simular la
+      // La marca aparece en ~60% de las pasadas, para simular la
       // variabilidad real entre ejecuciones del mismo prompt.
       const mentionsBrand = seed % 10 < 6;
       const citesDomain = mentionsBrand && seed % 10 < 4 && !!config.brand.domain;

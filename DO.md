@@ -6,6 +6,13 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-15
 
+- **Migración del motor al estándar**: partido en
+  `src/lib/services/measurement/` (service, repository, scoring,
+  validation con Zod, errores tipados) e integraciones en
+  `src/lib/integrations/` (Perplexity con validación de respuesta, mock).
+  Tipos de dominio en `src/types/`, entrypoints CLI en `scripts/`, alias
+  `@/…` hacia `src/`. Dashboard recableado al servicio. Verificado sin
+  regresión (measure --mock idéntico, test del scoring, build, navegador).
 - **Gobernanza del proyecto**: creados los `.md` de raíz con roles
   separados (CLAUDE, AGENTS, VISION, TODO, DO, TEST, COMPONENTS, README)
   según el estándar de arquitectura acordado.

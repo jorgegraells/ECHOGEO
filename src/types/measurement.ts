@@ -1,6 +1,8 @@
-// Tipos del motor de medición. Todo lo que se guarda en disco está aquí
-// para que re-puntuar un histórico nunca dependa de código que ya no existe.
+// Tipos del dominio de medición. Todo lo que se persiste en disco está
+// aquí para que re-puntuar un histórico nunca dependa de código que ya no
+// existe.
 
+/** Marca a rastrear, con las variantes con las que puede aparecer escrita. */
 export interface BrandSpec {
   name: string;
   /** Variantes con las que puede aparecer escrita la marca */
@@ -9,6 +11,7 @@ export interface BrandSpec {
   domain?: string;
 }
 
+/** Parámetros de una medición: qué marca, contra quién y con qué prompts. */
 export interface MeasurementConfig {
   /** Marca objetivo de la medición */
   brand: BrandSpec;
@@ -22,7 +25,7 @@ export interface MeasurementConfig {
   engine: string;
 }
 
-/** Respuesta normalizada de un motor de IA, más su cuerpo crudo íntegro */
+/** Respuesta normalizada de un motor de IA, más su cuerpo crudo íntegro. */
 export interface EngineAnswer {
   text: string;
   /** URLs de las fuentes citadas por el motor */
@@ -31,12 +34,13 @@ export interface EngineAnswer {
   raw: unknown;
 }
 
+/** Contrato común de cualquier integración de motor de IA. */
 export interface EngineAdapter {
   id: string;
   query(prompt: string, runIndex: number): Promise<EngineAnswer>;
 }
 
-/** Una ejecución concreta de un prompt: la unidad que se guarda en disco */
+/** Una ejecución concreta de un prompt: la unidad que se guarda en disco. */
 export interface RunRecord {
   promptIndex: number;
   prompt: string;
@@ -46,43 +50,10 @@ export interface RunRecord {
   answer: EngineAnswer;
 }
 
+/** Fichero de medición: config + todas las respuestas crudas de las pasadas. */
 export interface MeasurementFile {
   version: 1;
   createdAt: string;
   config: MeasurementConfig;
   runs: RunRecord[];
-}
-
-// ---- Resultados del scoring (derivados, siempre recalculables) ----
-
-export interface RunScore {
-  promptIndex: number;
-  runIndex: number;
-  mentioned: boolean;
-  /** Posición 1-based entre las marcas mencionadas; null si no aparece */
-  position: number | null;
-  brandsMentioned: number;
-  /** El dominio propio está entre las fuentes citadas */
-  domainCited: boolean;
-}
-
-export interface PromptScore {
-  promptIndex: number;
-  prompt: string;
-  runs: number;
-  presence: number;      // 0..1 frecuencia de aparición
-  domainCited: number;   // 0..1 frecuencia de cita enlazada
-  avgPosition: number | null;
-}
-
-export interface Report {
-  brand: string;
-  engine: string;
-  totalRuns: number;
-  presence: number;
-  domainCited: number;
-  positionScore: number; // 0..1, mejor cuanto más arriba
-  index10: number;       // índice compuesto 0..10
-  prompts: PromptScore[];
-  runScores: RunScore[];
 }

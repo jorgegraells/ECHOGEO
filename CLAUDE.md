@@ -15,16 +15,17 @@ auditoría de citas y checks on-page. Detalle en [VISION.md](VISION.md).
 
 ## Estado actual (2026-07-15)
 
-**Prototipo funcional validado, en reestructuración hacia el estándar.**
-- Motor v0 (TypeScript + tsx) validado contra la API real de Perplexity
-  Sonar. Vive en `src/` de forma monolítica (pendiente de migrar a
-  `src/lib/services/`).
-- Dashboard v0 (Next.js 16) que lee `data/runs/` y pinta las mediciones.
-  Vive en `app/` (pendiente de migrar a `src/app/` y de partir en
-  componentes según convención).
-- Gobernanza y andamiaje de estructura establecidos. La migración del
-  código existente al estándar está pendiente y planificada por lotes en
-  [TODO.md](TODO.md).
+**Motor migrado al estándar; dashboard aún por migrar.**
+- Motor de medición en `src/lib/services/measurement/` (service,
+  repository, scoring, validation con Zod, errores tipados) e
+  integraciones en `src/lib/integrations/` (Perplexity, mock). Tipos de
+  dominio en `src/types/`. Entrypoints CLI en `scripts/`. Validado contra
+  la API real de Perplexity Sonar y con test unitario del scoring.
+- Dashboard v0 (Next.js 16) que lee `data/runs/` vía el servicio y pinta
+  las mediciones. Aún vive en `app/` (pendiente de migrar a `src/app/` y
+  de partir en componentes e i18n según convención).
+- Gobernanza y andamiaje de estructura establecidos. El resto de la
+  migración está planificado por lotes en [TODO.md](TODO.md).
 
 Al empezar cada sesión: leer [TODO.md](TODO.md) y las últimas líneas de
 [DO.md](DO.md) para saber qué toca.
