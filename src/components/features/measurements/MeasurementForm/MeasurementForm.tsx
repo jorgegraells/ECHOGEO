@@ -98,6 +98,8 @@ export function MeasurementForm({ action, labels }: MeasurementFormProps) {
           <select id="engine" name="engine" defaultValue="mock" className={styles.input}>
             <option value="mock">{labels.engineMock}</option>
             <option value="perplexity">{labels.enginePerplexity}</option>
+            <option value="openai">{labels.engineOpenai}</option>
+            <option value="gemini">{labels.engineGemini}</option>
           </select>
           <span className={styles.warning}>{labels.realWarning}</span>
         </div>

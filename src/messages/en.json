@@ -27,6 +27,8 @@
     "engineLabel": "Engine",
     "engineMock": "Simulated (no cost)",
     "enginePerplexity": "Perplexity (uses API credits)",
+    "engineOpenai": "OpenAI (uses API credits)",
+    "engineGemini": "Gemini (uses API credits)",
     "realWarning": "The real engine makes paid calls and the measurement may take a minute.",
     "submit": "Run measurement",
     "submitting": "Measuring…",

@@ -27,6 +27,8 @@ export default async function NewMeasurementPage() {
     engineLabel: t('newMeasurement.engineLabel'),
     engineMock: t('newMeasurement.engineMock'),
     enginePerplexity: t('newMeasurement.enginePerplexity'),
+    engineOpenai: t('newMeasurement.engineOpenai'),
+    engineGemini: t('newMeasurement.engineGemini'),
     realWarning: t('newMeasurement.realWarning'),
     submit: t('newMeasurement.submit'),
     submitting: t('newMeasurement.submitting'),

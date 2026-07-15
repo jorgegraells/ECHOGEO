@@ -27,6 +27,8 @@ export interface MeasurementFormLabels {
   engineLabel: string;
   engineMock: string;
   enginePerplexity: string;
+  engineOpenai: string;
+  engineGemini: string;
   realWarning: string;
   submit: string;
   submitting: string;

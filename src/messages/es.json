@@ -27,6 +27,8 @@
     "engineLabel": "Motor",
     "engineMock": "Simulado (sin coste)",
     "enginePerplexity": "Perplexity (consume créditos de API)",
+    "engineOpenai": "OpenAI (consume créditos de API)",
+    "engineGemini": "Gemini (consume créditos de API)",
     "realWarning": "El motor real hace llamadas de pago y la medición puede tardar un minuto.",
     "submit": "Lanzar medición",
     "submitting": "Midiendo…",

@@ -1,4 +1,9 @@
-import { createMockAdapter, createPerplexityAdapter } from '@/lib/integrations';
+import {
+  createGeminiAdapter,
+  createMockAdapter,
+  createOpenAIAdapter,
+  createPerplexityAdapter,
+} from '@/lib/integrations';
 import type {
   EngineAdapter,
   MeasurementConfig,
@@ -33,20 +38,37 @@ const ID_PATTERN = /^[A-Za-z0-9._-]+$/;
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/**
+ * Motores reales soportados: su variable de entorno y la fábrica del
+ * adaptador. Añadir un motor nuevo es una línea aquí.
+ */
+const REAL_ENGINES: Record<
+  string,
+  { envVar: string; create: (apiKey: string) => EngineAdapter }
+> = {
+  perplexity: {
+    envVar: 'PERPLEXITY_API_KEY',
+    create: (key) => createPerplexityAdapter(key),
+  },
+  openai: { envVar: 'OPENAI_API_KEY', create: (key) => createOpenAIAdapter(key) },
+  gemini: { envVar: 'GEMINI_API_KEY', create: (key) => createGeminiAdapter(key) },
+};
+
 /** Elige la integración según la config, o el mock si se pide. */
 function resolveAdapter(config: MeasurementConfig, useMock: boolean): EngineAdapter {
   if (useMock || config.engine === 'mock') return createMockAdapter(config);
-  if (config.engine === 'perplexity') {
-    const key = process.env['PERPLEXITY_API_KEY'];
-    if (!key) {
-      throw new EngineNotConfiguredError(
-        'perplexity',
-        'falta PERPLEXITY_API_KEY en .env.local',
-      );
-    }
-    return createPerplexityAdapter(key);
+
+  const engine = REAL_ENGINES[config.engine];
+  if (!engine) throw new UnknownEngineError(config.engine);
+
+  const key = process.env[engine.envVar];
+  if (!key) {
+    throw new EngineNotConfiguredError(
+      config.engine,
+      `falta ${engine.envVar} en .env.local`,
+    );
   }
-  throw new UnknownEngineError(config.engine);
+  return engine.create(key);
 }
 
 /**

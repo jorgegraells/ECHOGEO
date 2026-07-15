@@ -57,10 +57,19 @@ export function parseMeasurementConfig(input: unknown): MeasurementConfig {
 }
 
 /**
- * Valida un fichero de medición leído de disco. El cast final salva la
- * única diferencia con el tipo de dominio: Zod infiere `raw` como opcional
- * (unknown incluye undefined), pero semánticamente siempre está presente.
+ * Valida un fichero de medición leído de disco. Lanza InvalidConfigError
+ * tipado (no un ZodError crudo) para ser coherente con el resto del borde.
+ * El cast final salva la única diferencia con el tipo de dominio: Zod
+ * infiere `raw` como opcional (unknown incluye undefined), pero
+ * semánticamente siempre está presente.
  */
 export function parseMeasurementFile(input: unknown): MeasurementFile {
-  return measurementFileSchema.parse(input) as MeasurementFile;
+  const result = measurementFileSchema.safeParse(input);
+  if (!result.success) {
+    const detail = result.error.issues
+      .map((i) => `${i.path.join('.') || '(raíz)'}: ${i.message}`)
+      .join('; ');
+    throw new InvalidConfigError(detail);
+  }
+  return result.data as MeasurementFile;
 }
