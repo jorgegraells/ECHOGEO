@@ -30,14 +30,16 @@ verificables, sin romper el build entre uno y otro.
       cliente o selector de idioma; hoy no lo necesita.)*
 - [x] **`data-component`**: añadido a los componentes y registrado en
       [COMPONENTS.md](COMPONENTS.md).
-- [ ] **Selector de idioma**: un control en la UI que escriba la cookie
-      `locale` (hoy solo se puede cambiar a mano).
+- [x] **Selector de idioma**: control ES/EN en la cabecera
+      (`LocaleSwitcher`) que escribe la cookie `locale` vía Server Action y
+      revalida el layout.
 - [ ] **ESLint**: configurar flat config con el orden de imports como regla
       y añadir `npm run lint` al checklist de commit.
 - [ ] **Playwright**: configurar el runner E2E y un primer flujo del
       dashboard.
-- [ ] **Más tests**: cubrir el parseo de la integración de Perplexity con
-      fixtures de crudo, y la validación Zod, según [TEST.md](TEST.md).
+- [x] **Más tests**: cubierto el parseo de Perplexity (fixture), la
+      validación Zod, el traductor i18n y el parseo de OpenAI/Gemini. 25
+      tests en total.
 
 ## Producto (después de la migración)
 
@@ -50,8 +52,12 @@ verificables, sin romper el build entre uno y otro.
       con estado "en curso / lista" en la UI.
 - [ ] Fórmula del Índice de Eco v1 con la varianza entre pasadas
       declarada en el propio índice, no solo en las métricas.
-- [ ] Segundo motor de IA (OpenAI Responses API con web search).
-- [ ] Tercer motor (Gemini con grounding).
+- [x] Segundo motor (OpenAI Responses API) y tercer motor (Gemini con
+      grounding): integraciones escritas, con test de parsing y registradas
+      en el servicio y el formulario.
+- [ ] **Verificar OpenAI y Gemini contra la API real**: con sus claves,
+      confirmar el formato de request/respuesta y el modelo por defecto
+      (`gpt-5.4`, `gemini-3.5-flash` son plausibles pero sin comprobar).
 - [ ] Checks on-page automáticos (fetch de la web + auditoría de
       citabilidad).
 - [ ] Landing pública sobre los tokens de la estación de medición.

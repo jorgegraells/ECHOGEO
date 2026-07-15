@@ -52,10 +52,13 @@ Al empezar cada sesión: leer [TODO.md](TODO.md) y las últimas líneas de
 
 ## Motores de IA
 
-- **Perplexity Sonar** (integrado): citas nativas en metadatos, el más
-  barato. Endpoint `chat/completions`.
-- **OpenAI Responses API** y **Gemini con grounding**: previstos, ambos
-  devuelven citas estructuradas.
+- **Perplexity Sonar** (integrado y validado contra API real): citas
+  nativas en metadatos, el más barato. Endpoint `chat/completions`.
+- **OpenAI Responses API** y **Gemini con grounding** (integrados en
+  `src/lib/integrations/`, con test de parsing por fixture, pero AÚN NO
+  verificados contra la API real: faltan `OPENAI_API_KEY` / `GEMINI_API_KEY`
+  y confirmar el formato exacto de respuesta). Registrados en el servicio
+  y ofrecidos en el formulario.
 
 ## Modelo de datos (v0, filesystem)
 

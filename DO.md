@@ -6,6 +6,15 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-15
 
+- **Lote en paralelo (4 subagentes)**: integraciones de OpenAI (Responses
+  API) y Gemini (grounding) con test de parsing por fixture, registradas en
+  el servicio (registro de motores) y ofrecidas en el formulario; selector
+  de idioma ES/EN en la cabecera (LocaleSwitcher + Server Action setLocale);
+  batería de tests unitarios (validación Zod, parseo Perplexity, traductor
+  i18n). El orquestador integró el wiring, arregló `parseMeasurementFile`
+  para lanzar error tipado y el import client-safe del LocaleSwitcher.
+  25 tests en verde, typecheck y build OK, selector verificado en navegador.
+  Pendiente: verificar OpenAI/Gemini contra API real (faltan claves).
 - **Crear mediciones desde la web**: formulario en `/runs/new`
   (MeasurementForm, client) + Server Action `createMeasurement` que valida
   con Zod y delega en el servicio, con motor simulado por defecto y

@@ -15,6 +15,7 @@ entidad propia lleva su `data-component` y se registra aquí.
 | `prompt-log` | `src/components/features/measurements/PromptLog` | Registro por prompt y estado de cada pasada |
 | `source-audit` | `src/components/features/measurements/SourceAudit` | Auditoría de fuentes citadas |
 | `measurement-form` | `src/components/features/measurements/MeasurementForm` | Formulario para crear y lanzar una medición |
+| `locale-switcher` | `src/components/shared/LocaleSwitcher` | Selector de idioma ES/EN de la cabecera |
 
 ## Cómo registrar uno
 
