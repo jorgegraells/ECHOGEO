@@ -9,9 +9,18 @@ Núcleo del producto:
 - Auditoría de citas (qué fuentes cita cada motor y si la marca aparece).
 - Checks on-page automáticos (qué le falta a la web para ser citable).
 
-## Estado actual (2026-07-14)
+## Estado actual (2026-07-15)
 
-**Motor v0 funcionando en modo script** (TypeScript + tsx, sin UI):
+**Dashboard web funcionando** (Next.js 16 + Tailwind v4, en `app/`):
+- `npm run dev` → lista de mediciones en `/` y detalle en `/runs/<id>`,
+  leyendo directamente de `data/runs/` (sin BD todavía).
+- Tokens del diseño "estación de medición" en `app/globals.css`
+  (@theme); fuentes vía next/font. Ojo: los tokens de fuente van en
+  `@theme inline` porque referencian variables que next/font define
+  en el body.
+- TypeScript fijado a 5.x: Next 16 no funciona con TS 7.
+
+**Motor v0 validado contra la API real de Perplexity** (TypeScript + tsx):
 - `npm run measure -- --mock` → medición completa simulada, sin coste.
 - `npm run measure` → contra Perplexity Sonar (necesita `.env.local`
   con `PERPLEXITY_API_KEY`; ver `.env.example`).
@@ -22,8 +31,9 @@ Núcleo del producto:
 - Fórmula v0 documentada en `src/scoring.ts`. El crudo se guarda
   íntegro en `data/` (gitignored) para poder re-puntuar históricos.
 
-**Pendiente**: validar contra la API real con una marca de Jorge (falta
-la API key), luego landing y dashboard.
+**Pendiente**: landing pública, fórmula v1 con varianza declarada,
+segundo motor (OpenAI o Gemini), y rotar la clave de Perplexity (quedó
+expuesta en un chat).
 
 ## Decisiones tomadas
 

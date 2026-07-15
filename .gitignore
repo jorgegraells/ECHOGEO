@@ -9,6 +9,14 @@ node_modules/
 # Datos de mediciones (respuestas crudas y reportes)
 data/
 
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# TypeScript
+*.tsbuildinfo
+
 # Sistema
 .DS_Store
 Thumbs.db

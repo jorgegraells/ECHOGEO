@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+
+/* Tokens de la estación de medición: papel de registrador, tinta, señal */
+@theme {
+  --color-paper: #f2f1ea;
+  --color-panel: #faf9f3;
+  --color-panel-hover: #edece2;
+  --color-ink: #1b1f1c;
+  --color-ink-soft: #59605a;
+  --color-ink-faint: rgba(27, 31, 28, 0.22);
+  --color-ruling: rgba(96, 140, 110, 0.14);
+  --color-ruling-strong: rgba(96, 140, 110, 0.3);
+  --color-signal: #175e45;
+  --color-alarm: #b3402e;
+}
+
+/* Los tokens de fuente referencian variables que next/font define en el
+   body, así que deben ser inline: si no, se resuelven vacíos en :root */
+@theme inline {
+  --font-display: var(--font-instrument-serif);
+  --font-body: var(--font-newsreader);
+  --font-mono: var(--font-plex-mono);
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-paper);
+}
+
+/* Cuadrícula de papel de registro para los paneles de instrumento */
+.chart-paper {
+  background-image:
+    linear-gradient(var(--color-ruling-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-ruling-strong) 1px, transparent 1px),
+    linear-gradient(var(--color-ruling) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-ruling) 1px, transparent 1px);
+  background-size:
+    90px 90px,
+    90px 90px,
+    18px 18px,
+    18px 18px;
+  background-color: var(--color-panel);
+}
+
+/* Etiqueta pequeña de instrumento, en mayúsculas mono */
+.kicker {
+  font-family: var(--font-plex-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
