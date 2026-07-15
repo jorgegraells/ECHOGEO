@@ -1,0 +1,35 @@
+{
+  "common": {
+    "appName": "EchoGEO",
+    "tagline": "Estación de medición"
+  },
+  "nav": {
+    "measurements": "Mediciones"
+  },
+  "measurements": {
+    "title": "Mediciones",
+    "count": "{count, plural, one {# registro} other {# registros}}",
+    "empty": "Aún no hay mediciones guardadas. Lanza la primera desde la terminal.",
+    "presenceShort": "{value} pres."
+  },
+  "runDetail": {
+    "indexLabel": "Índice de Eco · v0",
+    "queriesSummary": "{prompts} prompts × {runs} pasadas = {total} consultas",
+    "metrics": {
+      "presence": "Presencia",
+      "presenceHint": "apariciones en {total} pasadas",
+      "linkedCitation": "Cita enlazada",
+      "linkedCitationHint": "pasadas con tu dominio en las fuentes",
+      "position": "Posición",
+      "positionHint": "lugar entre las marcas mencionadas"
+    },
+    "byPrompt": "Registro por prompt",
+    "legend": "● mención con cita · ○ mención · × sin mención",
+    "notPresent": "no aparece",
+    "avgPosition": "posición media {value}",
+    "sources": "Fuentes citadas",
+    "sourcesCount": "{count} dominios distintos",
+    "sourcesEmpty": "El motor no devolvió fuentes en esta medición.",
+    "ownDomain": "Tu dominio"
+  }
+}

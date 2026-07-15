@@ -1,0 +1,35 @@
+{
+  "common": {
+    "appName": "EchoGEO",
+    "tagline": "Measurement station"
+  },
+  "nav": {
+    "measurements": "Measurements"
+  },
+  "measurements": {
+    "title": "Measurements",
+    "count": "{count, plural, one {# record} other {# records}}",
+    "empty": "No measurements saved yet. Run the first one from the terminal.",
+    "presenceShort": "{value} pres."
+  },
+  "runDetail": {
+    "indexLabel": "Echo Index · v0",
+    "queriesSummary": "{prompts} prompts × {runs} runs = {total} queries",
+    "metrics": {
+      "presence": "Presence",
+      "presenceHint": "appearances across {total} runs",
+      "linkedCitation": "Linked citation",
+      "linkedCitationHint": "runs with your domain among the sources",
+      "position": "Position",
+      "positionHint": "rank among mentioned brands"
+    },
+    "byPrompt": "Log by prompt",
+    "legend": "● mention with citation · ○ mention · × no mention",
+    "notPresent": "not present",
+    "avgPosition": "average position {value}",
+    "sources": "Cited sources",
+    "sourcesCount": "{count} distinct domains",
+    "sourcesEmpty": "The engine returned no sources for this measurement.",
+    "ownDomain": "Your domain"
+  }
+}
