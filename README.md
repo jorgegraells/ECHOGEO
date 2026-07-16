@@ -26,6 +26,7 @@ npm run dev                          # dashboard en http://localhost:3000
 npm run measure                      # medición real (gasta créditos de API)
 npm run measure -- --mock            # medición simulada, sin coste
 npm run score -- data/runs/<carpeta> # re-puntúa una medición guardada
+npm run audit -- <dominio>           # auditoría on-page de una web
 npm run build                        # build de producción
 npm run typecheck                    # comprobación de tipos
 ```

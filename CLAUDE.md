@@ -29,8 +29,21 @@ auditoría de citas y checks on-page. Detalle en [VISION.md](VISION.md).
   Perplexity real opcional) y redirige a su detalle. La medición corre
   síncrona en la action; sirve en local, pero en producción las
   mediciones reales (lentas) deben ir a un job runner (ver [TODO.md]).
-- Falta ESLint, Playwright y el selector de idioma en la UI. Resto por
-  lotes en [TODO.md](TODO.md).
+- **Auditoría on-page** en `src/lib/services/onpage/` (`npm run audit --
+  <dominio>`): 4 checks con evidencia declarada (acceso de crawlers con
+  parser RFC 9309, contenido visible sin JS, frescura, higiene). Aún no
+  integrada en la UI ni en las recomendaciones.
+- Falta ESLint y Playwright. Resto por lotes en [TODO.md](TODO.md).
+
+## Qué medimos y qué no (importante)
+
+Las decisiones sobre qué señales on-page medir están justificadas con
+fuentes en [docs/evidencia-geo.md](docs/evidencia-geo.md). Resumen:
+**no** medimos `llms.txt` (ningún motor lo usa; Google documenta que lo
+ignora; el 97 % de esos archivos no recibe una sola petición), ni el
+schema como palanca de citación (un estudio controlado no halló efecto),
+ni velocidad ni E-E-A-T (folclore SEO). Antes de añadir un check nuevo,
+pasa por ese documento: se exige evidencia.
 
 Al empezar cada sesión: leer [TODO.md](TODO.md) y las últimas líneas de
 [DO.md](DO.md) para saber qué toca.

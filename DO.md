@@ -6,6 +6,22 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-16
 
+- **Auditoría on-page, servicio (Fase A)**: nuevo `src/lib/services/onpage/`
+  con 4 checks respaldados por evidencia y un parser propio de robots.txt
+  (RFC 9309, incluida la regla de que un bot con grupo propio ignora el `*`).
+  Catálogo de bots con la distinción crítica citación/entrenamiento: bloquear
+  OAI-SearchBot o PerplexityBot te borra de las respuestas; bloquear GPTBot o
+  ClaudeBot no. CLI `npm run audit -- <dominio>`. 26 tests. Verificado contra
+  webs reales: nomadcoffee.es sale limpio; nytimes.com da 4 críticos (bloquea
+  OAI-SearchBot, PerplexityBot, Claude-SearchBot y meta-webindexer) pero
+  conserva las AI Overviews porque permite Googlebot, y su bloqueo de
+  entrenamiento sale como info, no como fallo.
+- **Investigación de evidencia GEO** documentada en
+  [docs/evidencia-geo.md](docs/evidencia-geo.md): descartados llms.txt (97 %
+  de los archivos no recibe una petición; Google documenta que lo ignora),
+  el schema como palanca (estudio controlado sin efecto), velocidad y E-E-A-T.
+  Registrado también el techo honesto: el 82-84 % de las citas son earned
+  media, fuera de la web del cliente.
 - **Recomendaciones deterministas ("Prescripción")**: capa nueva en el
   servicio (`buildRecommendations`) que deriva consejos accionables de los
   datos de la medición mediante reglas (cita enlazada baja por motor, hueco

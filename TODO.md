@@ -67,9 +67,16 @@ verificables, sin romper el build entre uno y otro.
       huecos por prompt, divergencia entre motores, fuente ajena donde no
       apareces, posición, falta de dominio). Sección "Prescripción" en el
       detalle. Sin LLM, reproducible. Verificado con datos reales.
-- [ ] **Recomendaciones on-page**: las de verdad potentes (qué contenido
-      falta, cómo estructurar la web para ser citable) necesitan los checks
-      on-page (fetch de la web del cliente). Es el siguiente escalón.
+- [~] **Checks on-page** (evidencia en [docs/evidencia-geo.md](docs/evidencia-geo.md)):
+      - [x] Servicio `src/lib/services/onpage/` con los 4 checks que
+            sobreviven a la evidencia: acceso de crawlers (parser RFC 9309 +
+            catálogo de bots citación/entrenamiento), contenido visible sin
+            JS, frescura e higiene. CLI `npm run audit`. Verificado contra
+            webs reales.
+      - [ ] Integrar en la medición: guardar la auditoría junto al crudo y
+            mostrarla en el detalle (con su nivel de evidencia en la UI).
+      - [ ] Alimentar la Prescripción con los hallazgos on-page: es el
+            "nivel 2" (acciones específicas de la web del cliente).
 - [ ] Fórmula del Índice de Eco v1 con la varianza entre pasadas
       declarada en el propio índice, no solo en las métricas.
 - [x] Segundo motor (OpenAI Responses API) y tercer motor (Gemini con
