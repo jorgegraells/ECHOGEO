@@ -1,6 +1,7 @@
 import { MeasurementForm } from '@/components/features/measurements';
 import { SectionHeading } from '@/components/ui';
 import { getI18n } from '@/lib/i18n';
+import { MEASUREMENT_SIZES } from '@/lib/services/measurement';
 
 import { createMeasurement } from './actions';
 
@@ -22,8 +23,13 @@ export default async function NewMeasurementPage() {
     competitorsHint: t('newMeasurement.competitorsHint'),
     promptsLabel: t('newMeasurement.promptsLabel'),
     promptsHint: t('newMeasurement.promptsHint'),
-    runsLabel: t('newMeasurement.runsLabel'),
-    runsHint: t('newMeasurement.runsHint'),
+    // Plantillas: el contador se interpola en el cliente según se escribe.
+    promptsCount: t('newMeasurement.promptsCount'),
+    promptsOverLimit: t('newMeasurement.promptsOverLimit'),
+    sizeLabel: t('newMeasurement.sizeLabel'),
+    sizeHint: t('newMeasurement.sizeHint', {
+      runs: MEASUREMENT_SIZES.basic.runsPerPrompt,
+    }),
     enginesLabel: t('newMeasurement.enginesLabel'),
     enginesHint: t('newMeasurement.enginesHint'),
     mockLabel: t('newMeasurement.mockLabel'),
@@ -33,6 +39,17 @@ export default async function NewMeasurementPage() {
     submitting: t('newMeasurement.submitting'),
   };
 
+  // Los tamaños salen del servicio: la UI no inventa límites.
+  const sizes = [
+    { size: MEASUREMENT_SIZES.basic, key: 'sizeBasic' },
+    { size: MEASUREMENT_SIZES.medium, key: 'sizeMedium' },
+    { size: MEASUREMENT_SIZES.full, key: 'sizeFull' },
+  ].map(({ size, key }) => ({
+    id: size.id,
+    maxPrompts: size.maxPrompts,
+    label: t(`newMeasurement.${key}`, { max: size.maxPrompts }),
+  }));
+
   return (
     <div className="pt-10">
       <SectionHeading
@@ -40,7 +57,7 @@ export default async function NewMeasurementPage() {
         label={t('common.register')}
         title={t('newMeasurement.title')}
       />
-      <MeasurementForm action={createMeasurement} labels={labels} />
+      <MeasurementForm action={createMeasurement} labels={labels} sizes={sizes} />
     </div>
   );
 }

@@ -93,6 +93,25 @@ verificables, sin romper el build entre uno y otro.
 - [ ] Landing pública sobre los tokens de la estación de medición.
 - [ ] Vista de comparación entre mediciones (evolución en el tiempo).
 
+## Camino a cobrar (self-serve)
+
+- [x] **Coste por medición**: `computeCost` calcula lo que cuesta cada
+      medición desde el crudo (exacto en Perplexity, calculado en OpenAI).
+- [x] **Tamaños de medición**: `measurement.plans.ts` define los límites
+      técnicos (prompts y pasadas por tamaño) y el servidor los hace cumplir.
+      Los precios NO viven aquí: van en la pasarela de pago (el repo es
+      público y así se cambian sin desplegar).
+- [ ] **Verificar el coste de Gemini**: es el único motor cuyo coste está
+      estimado, y entra en el precio. Necesita cuota en la clave.
+- [ ] **Mediciones en background** (Trigger.dev o Inngest): una medición real
+      tarda minutos; hoy corre síncrona en la Server Action. Bloqueante para
+      producción.
+- [ ] **Auth** (Better Auth) y multi-tenant: marcas y agencias.
+- [ ] **Pagos** (Stripe): medición puntual por tamaño y suscripción; los
+      precios y sus IDs viven en Stripe.
+- [ ] **Contabilidad de uso**: registrar qué tamaño se compró en la medición
+      y consumir la bolsa del plan.
+
 ## Higiene
 
 - [ ] Rotar la clave de Perplexity: quedó expuesta en un chat. Generar una

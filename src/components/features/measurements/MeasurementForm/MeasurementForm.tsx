@@ -1,17 +1,20 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 
+import { countPrompts, fillTemplate } from './MeasurementForm.logic';
 import { styles } from './MeasurementForm.styles';
 import type {
   CreateMeasurementAction,
   CreateMeasurementState,
   MeasurementFormLabels,
+  MeasurementSizeOption,
 } from './MeasurementForm.types';
 
 interface MeasurementFormProps {
   action: CreateMeasurementAction;
   labels: MeasurementFormLabels;
+  sizes: MeasurementSizeOption[];
 }
 
 const initialState: CreateMeasurementState = { status: 'idle' };
@@ -25,8 +28,14 @@ const AVAILABLE_ENGINES = [
 ] as const;
 
 /** Formulario para definir y lanzar una medición desde la web. */
-export function MeasurementForm({ action, labels }: MeasurementFormProps) {
+export function MeasurementForm({ action, labels, sizes }: MeasurementFormProps) {
   const [state, formAction, pending] = useActionState(action, initialState);
+  const [sizeId, setSizeId] = useState(sizes[0]?.id ?? '');
+  const [promptCount, setPromptCount] = useState(0);
+
+  const size = sizes.find((s) => s.id === sizeId) ?? sizes[0];
+  const maxPrompts = size?.maxPrompts ?? 0;
+  const overLimit = promptCount > maxPrompts;
 
   return (
     <form action={formAction} data-component="measurement-form" className={styles.form}>
@@ -76,27 +85,43 @@ export function MeasurementForm({ action, labels }: MeasurementFormProps) {
       </div>
 
       <div className={styles.field}>
-        <label htmlFor="prompts" className={styles.label}>
-          {labels.promptsLabel}
+        <label htmlFor="size" className={styles.label}>
+          {labels.sizeLabel}
         </label>
-        <textarea id="prompts" name="prompts" required className={styles.textarea} />
-        <span className={styles.hint}>{labels.promptsHint}</span>
+        <select
+          id="size"
+          name="size"
+          value={sizeId}
+          onChange={(e) => setSizeId(e.target.value)}
+          className={styles.input}
+        >
+          {sizes.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <span className={styles.hint}>{labels.sizeHint}</span>
       </div>
 
       <div className={styles.field}>
-        <label htmlFor="runs" className={styles.label}>
-          {labels.runsLabel}
+        <label htmlFor="prompts" className={styles.label}>
+          {labels.promptsLabel}
         </label>
-        <input
-          id="runs"
-          name="runs"
-          type="number"
-          min={1}
-          max={10}
-          defaultValue={3}
-          className={styles.input}
+        <textarea
+          id="prompts"
+          name="prompts"
+          required
+          onChange={(e) => setPromptCount(countPrompts(e.target.value))}
+          className={styles.textarea}
         />
-        <span className={styles.hint}>{labels.runsHint}</span>
+        <span className={styles.hint}>{labels.promptsHint}</span>
+        <span className={overLimit ? styles.warning : styles.hint}>
+          {fillTemplate(overLimit ? labels.promptsOverLimit : labels.promptsCount, {
+            count: promptCount,
+            max: maxPrompts,
+          })}
+        </span>
       </div>
 
       <fieldset className={styles.field}>
@@ -129,7 +154,7 @@ export function MeasurementForm({ action, labels }: MeasurementFormProps) {
 
       {state.status === 'error' ? <p className={styles.error}>{state.message}</p> : null}
 
-      <button type="submit" disabled={pending} className={styles.submit}>
+      <button type="submit" disabled={pending || overLimit} className={styles.submit}>
         {pending ? labels.submitting : labels.submit}
       </button>
     </form>

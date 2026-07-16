@@ -6,6 +6,18 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-16
 
+- **Tamaños de medición** (`measurement.plans.ts`): básica, media y completa,
+  con su límite de preguntas y las pasadas fijas (no se recortan para
+  abaratar: son la garantía de varianza). El formulario ofrece el tamaño y
+  avisa del límite en vivo, pero **la autoridad es el servidor**: se verificó
+  saltándose el bloqueo del cliente y la Server Action rechazó 30 prompts con
+  tamaño básico sin lanzar ninguna medición. Los precios NO están en el repo
+  (es público): viven en la pasarela de pago.
+- **Coste por medición** (`computeCost`): exacto en Perplexity (lo da la API),
+  calculado en OpenAI con tokens y número de búsquedas. Con datos reales:
+  Perplexity 0,0057 $/consulta y OpenAI ~0,0775 $/consulta cuando busca, o
+  sea unas 14 veces más. Sirve para controlar el margen desde la primera
+  venta.
 - **fix: las recomendaciones de bots bloqueados contradecían la medición**.
   Jorge detectó que la prescripción decía "bloqueas OAI-SearchBot: por eso no
   apareces en ChatGPT" mientras el desglose medía 100 % de presencia en

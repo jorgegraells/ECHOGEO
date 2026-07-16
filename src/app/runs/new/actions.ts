@@ -5,6 +5,9 @@ import { redirect } from 'next/navigation';
 import type { CreateMeasurementState } from '@/components/features/measurements';
 import { getI18n } from '@/lib/i18n';
 import {
+  applySize,
+  isMeasurementSize,
+  MEASUREMENT_SIZES,
   measurementConfigSchema,
   MeasurementError,
   runMeasurement,
@@ -30,6 +33,14 @@ export async function createMeasurement(
   const { t } = await getI18n();
   const useMock = formData.get('mock') === 'on';
 
+  // El tamaño contratado manda: fija las pasadas y limita los prompts. Lo
+  // aplica el servidor, no el formulario, que solo acompaña al usuario.
+  const sizeId = String(formData.get('size') ?? '');
+  if (!isMeasurementSize(sizeId)) {
+    return { status: 'error', message: t('newMeasurement.errorSize') };
+  }
+  const size = MEASUREMENT_SIZES[sizeId];
+
   const parsed = measurementConfigSchema.safeParse({
     brand: {
       name: String(formData.get('name') ?? '').trim(),
@@ -38,7 +49,7 @@ export async function createMeasurement(
     },
     competitors: splitList(formData.get('competitors'), 'line').map((name) => ({ name })),
     prompts: splitList(formData.get('prompts'), 'line'),
-    runsPerPrompt: Number(formData.get('runs') ?? 3),
+    runsPerPrompt: size.runsPerPrompt,
     engines: formData.getAll('engines').map(String),
   });
 
@@ -50,7 +61,8 @@ export async function createMeasurement(
   try {
     // .env.local lo carga Next automáticamente, así que los motores reales
     // encuentran su clave sin llamar a loadEnvLocal.
-    const result = await runMeasurement(parsed.data, { useMock });
+    const config = applySize(parsed.data, size);
+    const result = await runMeasurement(config, { useMock });
     id = result.id;
   } catch (err) {
     const detail = err instanceof MeasurementError ? err.message : String(err);

@@ -1,3 +1,10 @@
+/** Tamaño ofrecido en el formulario, ya con su etiqueta traducida. */
+export interface MeasurementSizeOption {
+  id: string;
+  maxPrompts: number;
+  label: string;
+}
+
 /** Estado del formulario devuelto por la Server Action. */
 export type CreateMeasurementState =
   { status: 'idle' } | { status: 'error'; message: string };
@@ -22,8 +29,11 @@ export interface MeasurementFormLabels {
   competitorsHint: string;
   promptsLabel: string;
   promptsHint: string;
-  runsLabel: string;
-  runsHint: string;
+  /** Plantillas con {count} y {max}: se interpolan en el cliente. */
+  promptsCount: string;
+  promptsOverLimit: string;
+  sizeLabel: string;
+  sizeHint: string;
   enginesLabel: string;
   enginesHint: string;
   mockLabel: string;

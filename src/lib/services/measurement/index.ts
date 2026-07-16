@@ -11,6 +11,13 @@ export { buildRecommendations } from './measurement.recommendations';
 export { computeCost } from './measurement.cost';
 export type { CostBasis, EngineCost, MeasurementCost } from './measurement.cost';
 export {
+  applySize,
+  countQueries,
+  isMeasurementSize,
+  MEASUREMENT_SIZES,
+} from './measurement.plans';
+export type { MeasurementSize, MeasurementSizeId } from './measurement.plans';
+export {
   measurementConfigSchema,
   measurementFileSchema,
   parseMeasurementConfig,
