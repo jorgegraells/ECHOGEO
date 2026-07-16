@@ -73,11 +73,11 @@
     "ownDomain": "Your domain"
   },
   "recommendations": {
-    "noDomain": "Add your brand's domain to measure when the AIs link your site, not just when they name you.",
-    "promptGap": "You show up only {presence} of the time for «{prompt}». That's a gap to work on.",
-    "linkedCitationLow": "On {engine} they name you but link your site only {citation} of the time. Become the cited source, not just a mention.",
-    "engineDivergence": "Your visibility varies by engine: {best} on {bestEngine} versus {worst} on {worstEngine}. The work is on {worstEngine}.",
-    "absentSource": "The engine cites {domain} in {frequency} of the runs and leaves you out. Showing up there would lift your visibility.",
-    "positionLow": "When you do appear, you tend to trail other brands. Gain position in the answers."
+    "noDomain": "Add your brand's domain in the settings to measure when the AIs link your site, not just when they name you.",
+    "promptGap": "You show up only {presence} of the time for «{prompt}». Publish a page that answers that question self-containedly (direct answer up top, concrete data, no fluff): the AIs recommend whoever appears in content that answers that exact question.",
+    "linkedCitationLow": "On {engine} they name you but link your site only {citation} of the time. {engine} cites sources that answer the question clearly and with data; create or improve an answer-ready page on your site about those prompts and link it to move from mention to cited source.",
+    "engineDivergence": "Your visibility varies by engine: {best} on {bestEngine} versus {worst} on {worstEngine}. Focus on {worstEngine}: check the sources section for the pages it cites for these prompts and work to be in them or to offer something better.",
+    "absentSource": "The engine cites {domain} in {frequency} of the runs and leaves you out. Get a presence there (a review, a comparison, a collaboration or a mention) or create your own content that covers the same better: it's a direct path to being cited.",
+    "positionLow": "When you do appear, you tend to trail other brands. Strengthen the signals that make you stand out: third-party reviews, concrete data (origins, prices, awards) and appearing in the sources the engine already cites."
   }
 }

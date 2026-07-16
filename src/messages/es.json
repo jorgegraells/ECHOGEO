@@ -73,11 +73,11 @@
     "ownDomain": "Tu dominio"
   },
   "recommendations": {
-    "noDomain": "Añade el dominio de tu marca para medir cuándo las IAs enlazan tu web, no solo cuándo te nombran.",
-    "promptGap": "Apareces solo el {presence} de las veces en «{prompt}». Es un hueco donde trabajar.",
-    "linkedCitationLow": "En {engine} te nombran pero solo enlazan tu web el {citation} de las veces. Consigue ser la fuente citada, no solo mencionada.",
-    "engineDivergence": "Tu visibilidad varía entre motores: {best} en {bestEngine} frente a {worst} en {worstEngine}. El trabajo está en {worstEngine}.",
-    "absentSource": "El motor cita {domain} en el {frequency} de las pasadas y no te incluye. Aparecer ahí subiría tu visibilidad.",
-    "positionLow": "Cuando apareces, sueles ir por detrás de otras marcas. Gana posición en las respuestas."
+    "noDomain": "Añade el dominio de tu marca en la configuración para medir cuándo las IAs enlazan tu web, no solo cuándo te nombran.",
+    "promptGap": "Apareces solo el {presence} de las veces en «{prompt}». Publica una página que responda esa pregunta de forma autocontenida (respuesta directa arriba, datos concretos, sin rodeos): las IAs recomiendan a quien aparece en contenido que responde justo esa pregunta.",
+    "linkedCitationLow": "En {engine} te nombran pero solo enlazan tu web el {citation} de las veces. {engine} cita fuentes que responden la pregunta con claridad y datos; crea o mejora en tu web una página respondible sobre esos prompts y enlázala para pasar de mención a fuente citada.",
+    "engineDivergence": "Tu visibilidad varía entre motores: {best} en {bestEngine} frente a {worst} en {worstEngine}. Concentra el esfuerzo en {worstEngine}: mira en la sección de fuentes qué páginas cita para estos prompts y trabaja para estar en ellas o para ofrecer algo mejor.",
+    "absentSource": "El motor cita {domain} en el {frequency} de las pasadas y no te incluye. Consigue presencia ahí (una reseña, una comparativa, una colaboración o una mención) o crea contenido propio que cubra lo mismo mejor: es una vía directa a que te cite.",
+    "positionLow": "Cuando apareces, sueles ir por detrás de otras marcas. Refuerza las señales que te hacen destacar: reseñas de terceros, datos concretos (orígenes, precios, premios) y aparecer en las fuentes que el motor ya cita."
   }
 }
