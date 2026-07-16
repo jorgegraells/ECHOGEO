@@ -17,6 +17,19 @@ export function formatNumber(value: number, locale: string, decimals = 1): strin
   }).format(value);
 }
 
+/**
+ * Importe en dólares. Los costes por medición son céntimos, así que se
+ * muestran con 4 decimales por debajo de 1 $ para que no salga "0,00 $".
+ */
+export function formatUsd(value: number, locale: string): string {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: value < 1 ? 4 : 2,
+    maximumFractionDigits: value < 1 ? 4 : 2,
+  }).format(value);
+}
+
 /** Fecha y hora legibles a partir de un ISO string. */
 export function formatDateTime(iso: string, locale: string): string {
   return new Intl.DateTimeFormat(locale, {

@@ -45,6 +45,8 @@
     "crumb": "{date} · motor {engine}",
     "queries": "{prompts} prompts × {runs} pasadas = {total} consultas",
     "domainSuffix": " · dominio {domain}",
+    "costSuffix": " · coste {cost}",
+    "costPartial": " · coste {cost} (sin contar {engines})",
     "indexLabel": "Índice de Eco · v0",
     "metrics": {
       "presence": "Presencia",

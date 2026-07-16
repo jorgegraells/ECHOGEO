@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 import { getI18n } from '@/lib/i18n';
-import { buildRecommendations } from '@/lib/services/measurement';
+import { buildRecommendations, computeCost } from '@/lib/services/measurement';
 import type { MeasurementResult } from '@/lib/services/measurement';
-import { formatDateTime } from '@/lib/utils';
+import { formatDateTime, formatUsd } from '@/lib/utils';
 
 import { EchoIndexPanel } from '../EchoIndexPanel';
 import { EngineBreakdown } from '../EngineBreakdown';
@@ -35,12 +35,28 @@ export async function MeasurementReport({ result }: MeasurementReportProps) {
   const promptReg = pad(++section);
   const sourceReg = pad(++section);
 
+  // Coste de la medición: exacto donde el motor lo da, calculado donde no.
+  // Si algún motor no sabemos cobrarlo, se dice en vez de fingir un total.
+  const cost = computeCost(file);
+  const unknownEngines = cost.byEngine
+    .filter((e) => e.costUsd === null)
+    .map((e) => e.engine)
+    .join(', ');
+  const costText = cost.hasUnknown
+    ? t('runDetail.costPartial', {
+        cost: formatUsd(cost.totalUsd, locale),
+        engines: unknownEngines,
+      })
+    : t('runDetail.costSuffix', { cost: formatUsd(cost.totalUsd, locale) });
+
   const meta =
     t('runDetail.queries', {
       prompts: file.config.prompts.length,
       runs: file.config.runsPerPrompt,
       total: report.totalRuns,
-    }) + (brand.domain ? t('runDetail.domainSuffix', { domain: brand.domain }) : '');
+    }) +
+    (brand.domain ? t('runDetail.domainSuffix', { domain: brand.domain }) : '') +
+    costText;
 
   return (
     <div data-component="measurement-report" className={styles.root}>

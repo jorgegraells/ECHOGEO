@@ -1,10 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { parseMeasurementConfig, runMeasurement } from '@/lib/services/measurement';
+import {
+  computeCost,
+  parseMeasurementConfig,
+  runMeasurement,
+} from '@/lib/services/measurement';
 import { loadEnvLocal } from '@/lib/utils/env';
 
-import { printReport } from './report';
+import { printCost, printReport } from './report';
 
 // Entrypoint CLI de una medición. Parsea argumentos, carga la config y
 // delega toda la lógica en el servicio de medición.
@@ -43,6 +47,7 @@ async function main(): Promise<void> {
   });
 
   printReport(result.report);
+  printCost(computeCost(result.file));
   console.log(`Crudo y reporte guardados en data/runs/${result.id}`);
 }
 

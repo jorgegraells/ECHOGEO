@@ -8,6 +8,8 @@ export {
 } from './measurement.service';
 export { scoreMeasurement } from './measurement.scoring';
 export { buildRecommendations } from './measurement.recommendations';
+export { computeCost } from './measurement.cost';
+export type { CostBasis, EngineCost, MeasurementCost } from './measurement.cost';
 export {
   measurementConfigSchema,
   measurementFileSchema,

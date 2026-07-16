@@ -45,6 +45,8 @@
     "crumb": "{date} · engine {engine}",
     "queries": "{prompts} prompts × {runs} runs = {total} queries",
     "domainSuffix": " · domain {domain}",
+    "costSuffix": " · cost {cost}",
+    "costPartial": " · cost {cost} (excluding {engines})",
     "indexLabel": "Echo Index · v0",
     "metrics": {
       "presence": "Presence",
