@@ -57,7 +57,9 @@ verificables, sin romper el build entre uno y otro.
       - [x] Fase B (UI): formulario con checkboxes de motores + toggle
             simular; detalle con desglose `EngineBreakdown` (solo si hay
             más de un motor). Verificado en navegador con mock de 3 motores.
-      - [ ] Verificar multi-motor real con 2 motores (Perplexity + OpenAI).
+      - [x] Verificado multi-motor real con Perplexity + OpenAI: el
+            desglose diverge de verdad (Nomad 8,5 en Perplexity vs 10,0 en
+            OpenAI; Perplexity lo enlaza solo en el 50 % de las pasadas).
       - [ ] Mejora: el "Registro por prompt" mezcla las pasadas de todos los
             motores sin distinguirlos; agrupar los marcadores por motor.
 - [ ] Fórmula del Índice de Eco v1 con la varianza entre pasadas

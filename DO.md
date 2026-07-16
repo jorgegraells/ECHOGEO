@@ -6,6 +6,12 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-16
 
+- **Verificación multi-motor real (Perplexity + OpenAI)**: medición de
+  Nomad Coffee en los dos motores a la vez. El desglose diverge de verdad:
+  índice 8,5 en Perplexity vs 10,0 en OpenAI, porque Perplexity solo enlaza
+  su web en la mitad de las respuestas y OpenAI en todas. Confirma que el
+  multi-motor aporta el insight accionable que se perdía con un solo motor.
+  Gemini sigue fuera por falta de cuota.
 - **Multi-motor, Fase B (UI)**: el formulario pasa a checkboxes de motores
   (Perplexity/OpenAI/Gemini) más un toggle "Simular (sin coste)"; el detalle
   añade el desglose por motor (`EngineBreakdown`), que solo aparece si se
