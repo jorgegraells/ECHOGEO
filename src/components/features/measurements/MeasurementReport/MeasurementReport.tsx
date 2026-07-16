@@ -7,6 +7,7 @@ import { formatDateTime } from '@/lib/utils';
 
 import { EchoIndexPanel } from '../EchoIndexPanel';
 import { EngineBreakdown } from '../EngineBreakdown';
+import { OnPageAudit } from '../OnPageAudit';
 import { Prescription } from '../Prescription';
 import { PromptLog } from '../PromptLog';
 import { SourceAudit } from '../SourceAudit';
@@ -19,17 +20,18 @@ interface MeasurementReportProps {
 /** Boletín completo de una medición: cabecera, índice, registro y fuentes. */
 export async function MeasurementReport({ result }: MeasurementReportProps) {
   const { locale, t } = await getI18n();
-  const { file, report } = result;
+  const { file, report, audit } = result;
   const brand = file.config.brand;
   const register = t('common.register');
   const multiEngine = report.byEngine.length > 1;
-  const recommendations = buildRecommendations(file, report);
+  const recommendations = buildRecommendations(file, report, audit);
 
   // Numeración de registros según qué secciones se muestran.
   const pad = (n: number) => `${register} ${String(n).padStart(2, '0')}`;
   let section = 0;
   const engineReg = multiEngine ? pad(++section) : null;
   const prescriptionReg = recommendations.length ? pad(++section) : null;
+  const onpageReg = audit ? pad(++section) : null;
   const promptReg = pad(++section);
   const sourceReg = pad(++section);
 
@@ -62,6 +64,7 @@ export async function MeasurementReport({ result }: MeasurementReportProps) {
       {prescriptionReg ? (
         <Prescription recommendations={recommendations} register={prescriptionReg} />
       ) : null}
+      {audit && onpageReg ? <OnPageAudit audit={audit} register={onpageReg} /> : null}
       <PromptLog report={report} register={promptReg} />
       <SourceAudit file={file} report={report} register={sourceReg} />
     </div>

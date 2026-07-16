@@ -73,10 +73,11 @@ verificables, sin romper el build entre uno y otro.
             catálogo de bots citación/entrenamiento), contenido visible sin
             JS, frescura e higiene. CLI `npm run audit`. Verificado contra
             webs reales.
-      - [ ] Integrar en la medición: guardar la auditoría junto al crudo y
-            mostrarla en el detalle (con su nivel de evidencia en la UI).
-      - [ ] Alimentar la Prescripción con los hallazgos on-page: es el
-            "nivel 2" (acciones específicas de la web del cliente).
+      - [x] Integrada en la medición: se audita al medir (sin tumbarla si la
+            web falla), se guarda `onpage.json` junto al crudo y el detalle
+            muestra la sección con el nivel de evidencia de cada hallazgo.
+      - [x] La Prescripción se encabeza con los hallazgos on-page graves
+            (prioridad 100): causa raíz + acción exacta sobre la web real.
 - [ ] Fórmula del Índice de Eco v1 con la varianza entre pasadas
       declarada en el propio índice, no solo en las métricas.
 - [x] Segundo motor (OpenAI Responses API) y tercer motor (Gemini con

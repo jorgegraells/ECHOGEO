@@ -1,6 +1,7 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+import type { OnPageAudit } from '@/lib/services/onpage';
 import type { MeasurementFile, Report } from '@/types';
 
 import { parseMeasurementFile } from './measurement.validation';
@@ -36,6 +37,29 @@ export function saveMeasurement(id: string, file: MeasurementFile): string {
   mkdirSync(dir, { recursive: true });
   writeFileSync(resolve(dir, 'measurement.json'), JSON.stringify(file, null, 2), 'utf8');
   return dir;
+}
+
+/**
+ * Guarda la auditoría on-page junto a su medición. Es un derivado: si el
+ * fichero falta o está corrupto, se puede volver a auditar.
+ */
+export function saveAudit(id: string, audit: OnPageAudit): void {
+  writeFileSync(
+    resolve(RUNS_DIR, id, 'onpage.json'),
+    JSON.stringify(audit, null, 2),
+    'utf8',
+  );
+}
+
+/** Lee la auditoría on-page de una medición; null si no existe o no es legible. */
+export function readAudit(id: string): OnPageAudit | null {
+  try {
+    return JSON.parse(
+      readFileSync(resolve(RUNS_DIR, id, 'onpage.json'), 'utf8'),
+    ) as OnPageAudit;
+  } catch {
+    return null;
+  }
 }
 
 /** Guarda el reporte puntuado junto a su medición. */

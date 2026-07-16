@@ -4,6 +4,7 @@ import {
   createOpenAIAdapter,
   createPerplexityAdapter,
 } from '@/lib/integrations';
+import { auditDomain, type OnPageAudit } from '@/lib/services/onpage';
 import type {
   EngineAdapter,
   MeasurementConfig,
@@ -19,7 +20,9 @@ import {
 } from './measurement.errors';
 import {
   listRunIds,
+  readAudit,
   readMeasurement,
+  saveAudit,
   saveMeasurement,
   saveReport,
 } from './measurement.repository';
@@ -37,6 +40,19 @@ const THROTTLE_MS = 400;
 const ID_PATTERN = /^[A-Za-z0-9._-]+$/;
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Audita la web de la marca sin que un fallo tumbe la medición: si la web no
+ * responde, la medición sigue siendo válida y simplemente no hay auditoría.
+ */
+async function tryAudit(config: MeasurementConfig): Promise<OnPageAudit | null> {
+  if (!config.brand.domain) return null;
+  try {
+    return await auditDomain(config.brand.domain, config.brand.name);
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Motores reales soportados: su variable de entorno y la fábrica del
@@ -121,7 +137,13 @@ export async function runMeasurement(
   saveMeasurement(id, file);
   const report = scoreMeasurement(file);
   saveReport(id, report);
-  return { id, file, report };
+
+  // La auditoría de la web acompaña a la medición: es lo que convierte el
+  // diagnóstico en acciones concretas sobre el sitio del cliente.
+  const audit = await tryAudit(config);
+  if (audit) saveAudit(id, audit);
+
+  return { id, file, report, audit };
 }
 
 /** Todas las mediciones guardadas, ya puntuadas, más recientes primero. */
@@ -129,7 +151,9 @@ export function listMeasurements(): MeasurementResult[] {
   return listRunIds()
     .map((id): MeasurementResult | null => {
       const file = readMeasurement(id);
-      return file ? { id, file, report: scoreMeasurement(file) } : null;
+      return file
+        ? { id, file, report: scoreMeasurement(file), audit: readAudit(id) }
+        : null;
     })
     .filter((x): x is MeasurementResult => x !== null)
     .sort((a, b) => b.file.createdAt.localeCompare(a.file.createdAt));
@@ -140,7 +164,7 @@ export function getMeasurement(id: string): MeasurementResult | null {
   if (!ID_PATTERN.test(id)) return null;
   const file = readMeasurement(id);
   if (!file) return null;
-  return { id, file, report: scoreMeasurement(file) };
+  return { id, file, report: scoreMeasurement(file), audit: readAudit(id) };
 }
 
 /**

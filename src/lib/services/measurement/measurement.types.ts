@@ -1,10 +1,13 @@
+import type { OnPageAudit } from '@/lib/services/onpage';
 import type { MeasurementFile, Report } from '@/types';
 
-/** Una medición con su fichero crudo y su reporte puntuado. */
+/** Una medición con su fichero crudo, su reporte y la auditoría de la web. */
 export interface MeasurementResult {
   id: string;
   file: MeasurementFile;
   report: Report;
+  /** Auditoría on-page del dominio de la marca; null si no hay dominio o falló. */
+  audit: OnPageAudit | null;
 }
 
 /** Progreso de una medición en curso, pasada a pasada. */

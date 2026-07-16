@@ -6,6 +6,14 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-16
 
+- **Auditoría on-page integrada (Fase B)**: al medir, si hay dominio, se
+  audita la web y se guarda `onpage.json` junto al crudo; un fallo de la web
+  no tumba la medición. El detalle muestra la sección "Auditoría de tu web"
+  con el nivel de evidencia de cada hallazgo, y la Prescripción se encabeza
+  con los hallazgos graves (prioridad 100). Con esto llega el "nivel 2" de
+  recomendación: en vez de "concéntrate en Perplexity", ahora dice "tu
+  robots.txt bloquea a PerplexityBot: por eso no apareces". Verificado en
+  navegador con una web que bloquea bots de citación.
 - **Auditoría on-page, servicio (Fase A)**: nuevo `src/lib/services/onpage/`
   con 4 checks respaldados por evidencia y un parser propio de robots.txt
   (RFC 9309, incluida la regla de que un bot con grupo propio ignora el `*`).

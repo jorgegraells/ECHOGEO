@@ -1,3 +1,4 @@
+import type { OnPageAudit } from '@/lib/services/onpage';
 import type { MeasurementFile, Recommendation, Report } from '@/types';
 
 // Recomendaciones deterministas: cada regla mira los datos de la medición y,
@@ -42,13 +43,30 @@ function topAbsentSource(file: MeasurementFile): HostCount | null {
   return top;
 }
 
-/** Genera las recomendaciones de una medición, ordenadas por prioridad. */
+/**
+ * Genera las recomendaciones de una medición, ordenadas por prioridad. Si hay
+ * auditoría de la web, sus hallazgos graves mandan sobre todo lo demás: de
+ * nada sirve trabajar el contenido si tu robots.txt impide que te lean.
+ */
 export function buildRecommendations(
   file: MeasurementFile,
   report: Report,
+  audit?: OnPageAudit | null,
 ): Recommendation[] {
   const recs: Recommendation[] = [];
   const hasDomain = !!file.config.brand.domain;
+
+  // Hallazgos on-page graves: son causa raíz y acción exacta a la vez.
+  // Reutilizan el `code` del hallazgo, cuyo texto ya es prescriptivo.
+  if (audit) {
+    for (const finding of audit.findings) {
+      if (finding.severity === 'critical') {
+        recs.push({ code: finding.code, priority: 100, values: finding.values });
+      } else if (finding.severity === 'warning') {
+        recs.push({ code: finding.code, priority: 55, values: finding.values });
+      }
+    }
+  }
 
   // Sin dominio no se puede medir la cita enlazada: el consejo es añadirlo.
   if (!hasDomain) {

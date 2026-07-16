@@ -31,8 +31,9 @@ auditoría de citas y checks on-page. Detalle en [VISION.md](VISION.md).
   mediciones reales (lentas) deben ir a un job runner (ver [TODO.md]).
 - **Auditoría on-page** en `src/lib/services/onpage/` (`npm run audit --
   <dominio>`): 4 checks con evidencia declarada (acceso de crawlers con
-  parser RFC 9309, contenido visible sin JS, frescura, higiene). Aún no
-  integrada en la UI ni en las recomendaciones.
+  parser RFC 9309, contenido visible sin JS, frescura, higiene). Integrada:
+  al medir se audita el dominio, se guarda `onpage.json` junto al crudo, el
+  detalle la muestra y sus hallazgos graves encabezan la Prescripción.
 - Falta ESLint y Playwright. Resto por lotes en [TODO.md](TODO.md).
 
 ## Qué medimos y qué no (importante)

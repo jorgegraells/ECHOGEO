@@ -110,6 +110,35 @@ describe('buildRecommendations', () => {
     expect(codes(file)).toContain('recommendations.noDomain');
   });
 
+  it('pone los hallazgos on-page graves por encima de todo lo demás', () => {
+    // De nada sirve trabajar el contenido si el robots.txt impide leerte.
+    const file = makeFile({}, [
+      { answer: { text: 'Solo Globex.', citations: ['https://otra.com'], raw: null } },
+    ]);
+    const audit = {
+      url: 'https://acme.com/',
+      fetchedAt: 'x',
+      findings: [
+        {
+          code: 'onpage.citationBotBlocked',
+          severity: 'critical' as const,
+          evidence: 'strong' as const,
+          values: { bot: 'PerplexityBot', surface: 'Perplexity' },
+        },
+      ],
+    };
+    const recs = buildRecommendations(file, scoreMeasurement(file), audit);
+    expect(recs[0]?.code).toBe('onpage.citationBotBlocked');
+    expect(recs[0]?.priority).toBe(100);
+  });
+
+  it('funciona sin auditoría on-page', () => {
+    const file = makeFile({}, [
+      { answer: { text: 'Acme lidera.', citations: [], raw: null } },
+    ]);
+    expect(() => buildRecommendations(file, scoreMeasurement(file), null)).not.toThrow();
+  });
+
   it('ordena las recomendaciones por prioridad descendente', () => {
     const file = makeFile({}, [
       { answer: { text: 'Solo Globex.', citations: ['https://otra.com'], raw: null } },
