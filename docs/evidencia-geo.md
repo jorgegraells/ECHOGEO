@@ -1,5 +1,25 @@
 # Evidencia detrás de los checks on-page
 
+## Caso de referencia: The New York Times (medición real, 2026-07-16)
+
+El NYT bloquea en su `robots.txt` a `OAI-SearchBot`, `PerplexityBot`,
+`Claude-SearchBot` y `Google-Extended`. Medición real contra Perplexity y
+OpenAI, 2 prompts sobre periódicos de referencia:
+
+| Métrica | Resultado |
+|---|---|
+| Presencia | **100 %** en ambos motores, siempre en 1.ª posición |
+| Cita enlazada | **0 %** en ambos |
+| Fuentes citadas por Perplexity | 15 y 12 por respuesta, **ninguna de nytimes.com** |
+| Fuentes citadas por OpenAI | **0**: respondió de memoria, sin buscar |
+
+**La lección, y es la clave de todo el producto**: bloquear un bot de citación
+**no te borra de las respuestas**, te borra de las **fuentes**. El modelo
+menciona al NYT porque lo conoce de su entrenamiento y de las miles de páginas
+que hablan de él; lo que no puede es enlazar su web. Por eso presencia y cita
+enlazada se miden por separado, y por eso una recomendación jamás debe decir
+"no apareces" basándose solo en el robots.txt: hay que cruzarlo con lo medido.
+
 Investigación de julio de 2026. Este documento justifica **qué medimos y qué
 no**, con fuentes. Si alguien pregunta por qué EchoGEO no puntúa `llms.txt` o
 el schema, la respuesta está aquí.
