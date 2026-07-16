@@ -22,6 +22,12 @@ export interface AiBot {
   tier: BotTier;
   /** Superficie afectada, para el mensaje de la recomendación. */
   surface: string;
+  /**
+   * Id del motor que EchoGEO mide y que depende de este bot, si lo hay. Sirve
+   * para cruzar el hallazgo con lo medido: bloquear el bot afecta a la cita
+   * enlazada de ese motor, no a que te mencionen.
+   */
+  engineId?: string;
   /** Documentación oficial que respalda la clasificación. */
   docs: string;
 }
@@ -34,6 +40,7 @@ export const AI_BOTS: AiBot[] = [
     token: 'OAI-SearchBot',
     tier: 'citation',
     surface: 'ChatGPT',
+    engineId: 'openai',
     docs: 'https://developers.openai.com/api/docs/bots',
   },
   {
@@ -43,6 +50,7 @@ export const AI_BOTS: AiBot[] = [
     token: 'PerplexityBot',
     tier: 'citation',
     surface: 'Perplexity',
+    engineId: 'perplexity',
     docs: 'https://docs.perplexity.ai/docs/resources/perplexity-crawlers',
   },
   {
@@ -116,6 +124,7 @@ export const AI_BOTS: AiBot[] = [
     token: 'Google-Extended',
     tier: 'grounding',
     surface: 'Gemini',
+    engineId: 'gemini',
     docs: 'https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers',
   },
 ];

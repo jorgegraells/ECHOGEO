@@ -110,12 +110,41 @@ describe('buildRecommendations', () => {
     expect(codes(file)).toContain('recommendations.noDomain');
   });
 
-  it('pone los hallazgos on-page graves por encima de todo lo demás', () => {
-    // De nada sirve trabajar el contenido si el robots.txt impide leerte.
-    const file = makeFile({}, [
-      { answer: { text: 'Solo Globex.', citations: ['https://otra.com'], raw: null } },
-    ]);
-    const audit = {
+  /** Medición en dos motores donde openai cita el dominio y perplexity no. */
+  function multiEngineFile(): MeasurementFile {
+    const base = {
+      promptIndex: 0,
+      prompt: '¿mejor opción?',
+      runIndex: 0,
+      timestamp: 'x',
+    };
+    return {
+      version: 1,
+      createdAt: 'x',
+      config: {
+        brand: { name: 'Acme', domain: 'acme.com' },
+        competitors: [],
+        prompts: ['¿mejor opción?'],
+        runsPerPrompt: 1,
+        engines: ['perplexity', 'openai'],
+      },
+      runs: [
+        {
+          ...base,
+          engine: 'perplexity',
+          answer: { text: 'Acme lidera.', citations: ['https://otra.com'], raw: null },
+        },
+        {
+          ...base,
+          engine: 'openai',
+          answer: { text: 'Acme lidera.', citations: ['https://acme.com'], raw: null },
+        },
+      ],
+    };
+  }
+
+  function auditWith(bot: string) {
+    return {
       url: 'https://acme.com/',
       fetchedAt: 'x',
       findings: [
@@ -123,13 +152,68 @@ describe('buildRecommendations', () => {
           code: 'onpage.citationBotBlocked',
           severity: 'critical' as const,
           evidence: 'strong' as const,
-          values: { bot: 'PerplexityBot', surface: 'Perplexity' },
+          values: { bot, surface: 'X' },
         },
       ],
     };
-    const recs = buildRecommendations(file, scoreMeasurement(file), audit);
-    expect(recs[0]?.code).toBe('onpage.citationBotBlocked');
+  }
+
+  it('usa el bloqueo del bot para explicar la falta de citas medida', () => {
+    // perplexity no cita el dominio y su bot está bloqueado: causa raíz.
+    const file = multiEngineFile();
+    const recs = buildRecommendations(
+      file,
+      scoreMeasurement(file),
+      auditWith('PerplexityBot'),
+    );
+    const cause = recs.find(
+      (r) => r.code === 'recommendations.botBlockExplainsNoCitation',
+    );
+    expect(cause?.priority).toBe(100);
+    expect(cause?.values.engine).toBe('perplexity');
+  });
+
+  it('no afirma que no apareces si el motor sí cita tu web pese al bloqueo', () => {
+    // openai SÍ cita el dominio: decir "no apareces" contradiría los datos.
+    const file = multiEngineFile();
+    const recs = buildRecommendations(
+      file,
+      scoreMeasurement(file),
+      auditWith('OAI-SearchBot'),
+    );
+    expect(recs.map((r) => r.code)).not.toContain(
+      'recommendations.botBlockExplainsNoCitation',
+    );
+    const contradiction = recs.find(
+      (r) => r.code === 'recommendations.botBlockedButCited',
+    );
+    expect(contradiction?.values.engine).toBe('openai');
+  });
+
+  it('informa del efecto real cuando el motor del bot no se midió', () => {
+    // Claude-SearchBot no tiene motor medido: se reporta el hallazgo tal cual.
+    const file = multiEngineFile();
+    const recs = buildRecommendations(
+      file,
+      scoreMeasurement(file),
+      auditWith('Claude-SearchBot'),
+    );
+    expect(recs.map((r) => r.code)).toContain('onpage.citationBotBlocked');
+  });
+
+  it('pone los hallazgos on-page graves por encima de todo lo demás', () => {
+    // De nada sirve trabajar el contenido si el robots.txt impide leerte.
+    const file = makeFile({}, [
+      { answer: { text: 'Solo Globex.', citations: ['https://otra.com'], raw: null } },
+    ]);
+    const recs = buildRecommendations(
+      file,
+      scoreMeasurement(file),
+      auditWith('PerplexityBot'),
+    );
     expect(recs[0]?.priority).toBe(100);
+    // Encabeza la causa raíz on-page, no un consejo de contenido.
+    expect(recs[0]?.code).toMatch(/^(onpage\.|recommendations\.botBlock)/);
   });
 
   it('funciona sin auditoría on-page', () => {

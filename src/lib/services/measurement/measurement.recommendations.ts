@@ -1,4 +1,4 @@
-import type { OnPageAudit } from '@/lib/services/onpage';
+import { AI_BOTS, type Finding, type OnPageAudit } from '@/lib/services/onpage';
 import type { MeasurementFile, Recommendation, Report } from '@/types';
 
 // Recomendaciones deterministas: cada regla mira los datos de la medición y,
@@ -44,6 +44,58 @@ function topAbsentSource(file: MeasurementFile): HostCount | null {
 }
 
 /**
+ * Cruza el bloqueo de un bot con lo medido en su motor. Bloquearlo impide la
+ * CITA ENLAZADA (que tu web sea la fuente), no la mención: el modelo puede
+ * nombrarte por lo que ya sabe. Por eso el consejo depende de los datos:
+ * - Sin citas en ese motor → el bloqueo explica el síntoma. Es la causa raíz.
+ * - Con citas pese al bloqueo → hay una contradicción que conviene revisar,
+ *   y afirmar que "no apareces" sería mentir.
+ */
+function crossBotBlock(finding: Finding, report: Report): Recommendation[] {
+  const bot = AI_BOTS.find((b) => b.token === finding.values.bot);
+  const engine = bot?.engineId
+    ? report.byEngine.find((e) => e.engine === bot.engineId)
+    : undefined;
+
+  // El motor de ese bot no se midió: se informa del efecto real, sin cruzar.
+  if (!engine) {
+    return [
+      {
+        code: finding.code,
+        priority: finding.severity === 'critical' ? 100 : 55,
+        values: finding.values,
+      },
+    ];
+  }
+
+  if (engine.domainCited === 0) {
+    return [
+      {
+        code: 'recommendations.botBlockExplainsNoCitation',
+        priority: 100,
+        values: {
+          engine: engine.engine,
+          bot: String(finding.values.bot ?? ''),
+          presence: engine.presence,
+        },
+      },
+    ];
+  }
+
+  return [
+    {
+      code: 'recommendations.botBlockedButCited',
+      priority: 50,
+      values: {
+        engine: engine.engine,
+        bot: String(finding.values.bot ?? ''),
+        citation: engine.domainCited,
+      },
+    },
+  ];
+}
+
+/**
  * Genera las recomendaciones de una medición, ordenadas por prioridad. Si hay
  * auditoría de la web, sus hallazgos graves mandan sobre todo lo demás: de
  * nada sirve trabajar el contenido si tu robots.txt impide que te lean.
@@ -60,11 +112,24 @@ export function buildRecommendations(
   // Reutilizan el `code` del hallazgo, cuyo texto ya es prescriptivo.
   if (audit) {
     for (const finding of audit.findings) {
-      if (finding.severity === 'critical') {
-        recs.push({ code: finding.code, priority: 100, values: finding.values });
-      } else if (finding.severity === 'warning') {
-        recs.push({ code: finding.code, priority: 55, values: finding.values });
+      if (finding.severity !== 'critical' && finding.severity !== 'warning') continue;
+
+      // Un bot bloqueado se contrasta con lo medido en ese motor: bloquearlo
+      // impide que citen tu web, no que te mencionen. Afirmar "no apareces"
+      // contradiría los datos cuando la marca sí sale mencionada.
+      if (
+        finding.code === 'onpage.citationBotBlocked' ||
+        finding.code === 'onpage.groundingBotBlocked'
+      ) {
+        recs.push(...crossBotBlock(finding, report));
+        continue;
       }
+
+      recs.push({
+        code: finding.code,
+        priority: finding.severity === 'critical' ? 100 : 55,
+        values: finding.values,
+      });
     }
   }
 

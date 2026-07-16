@@ -74,7 +74,7 @@
     "ownDomain": "Tu dominio"
   },
   "onpage": {
-    "citationBotBlocked": "Tu robots.txt bloquea a {bot}: por eso no apareces en {surface}. Quitar esa línea es lo primero que debes hacer; sin ella, ningún trabajo de contenido servirá.",
+    "citationBotBlocked": "Tu robots.txt bloquea a {bot}: {surface} no puede usar tu web como fuente citada. Podrá mencionarte por lo que ya sabe de ti, pero nunca enlazarte. Quita esa línea si quieres ser fuente, no solo mención.",
     "robotsServerError": "Tu robots.txt devuelve un error {status}. El protocolo obliga a los bots a asumir bloqueo total ante un fallo de servidor: mientras siga así, eres invisible para todas las IAs. Arregla ese endpoint.",
     "groundingBotBlocked": "Bloqueas a {bot}, así que pierdes el grounding de {surface} (sigues en las AI Overviews, que van por Googlebot). Si quieres aparecer en {surface}, quita esa línea.",
     "trainingBotsBlocked": "Bloqueas bots de entrenamiento ({bots}). No afecta a que te citen: es una decisión legítima sobre tu contenido.",
@@ -94,6 +94,8 @@
     "evidence": { "strong": "evidencia fuerte", "moderate": "evidencia moderada" }
   },
   "recommendations": {
+    "botBlockExplainsNoCitation": "Ya tenemos la causa: en {engine} te mencionan el {presence} de las veces pero nunca enlazan tu web, porque tu robots.txt bloquea a {bot}. Quita esa línea y podrán citarte como fuente en vez de solo nombrarte.",
+    "botBlockedButCited": "Ojo a esta contradicción: bloqueas a {bot} en tu robots.txt, pero {engine} sigue enlazando tu web el {citation} de las veces. Puede que el bloqueo sea reciente o que el motor no lo esté respetando; revísalo antes de tocar nada.",
     "noDomain": "Añade el dominio de tu marca en la configuración para medir cuándo las IAs enlazan tu web, no solo cuándo te nombran.",
     "promptGap": "Apareces solo el {presence} de las veces en «{prompt}». Publica una página que responda esa pregunta de forma autocontenida (respuesta directa arriba, datos concretos, sin rodeos): las IAs recomiendan a quien aparece en contenido que responde justo esa pregunta.",
     "linkedCitationLow": "En {engine} te nombran pero solo enlazan tu web el {citation} de las veces. {engine} cita fuentes que responden la pregunta con claridad y datos; crea o mejora en tu web una página respondible sobre esos prompts y enlázala para pasar de mención a fuente citada.",

@@ -74,7 +74,7 @@
     "ownDomain": "Your domain"
   },
   "onpage": {
-    "citationBotBlocked": "Your robots.txt blocks {bot}: that's why you never show up on {surface}. Removing that line is the first thing to do; without it, no content work will help.",
+    "citationBotBlocked": "Your robots.txt blocks {bot}: {surface} cannot use your site as a cited source. It may still name you from what it already knows, but never link you. Remove that line if you want to be a source, not just a mention.",
     "robotsServerError": "Your robots.txt returns a {status} error. The protocol requires bots to assume a full block on a server error: while it stays like this, you are invisible to every AI. Fix that endpoint.",
     "groundingBotBlocked": "You block {bot}, so you lose {surface} grounding (you stay in AI Overviews, which run on Googlebot). If you want to appear on {surface}, remove that line.",
     "trainingBotsBlocked": "You block training bots ({bots}). That does not affect being cited: it's a legitimate choice about your content.",
@@ -94,6 +94,8 @@
     "evidence": { "strong": "strong evidence", "moderate": "moderate evidence" }
   },
   "recommendations": {
+    "botBlockExplainsNoCitation": "Here's the cause: on {engine} they name you {presence} of the time but never link your site, because your robots.txt blocks {bot}. Remove that line and they'll be able to cite you as a source instead of merely naming you.",
+    "botBlockedButCited": "Note this contradiction: you block {bot} in your robots.txt, yet {engine} still links your site {citation} of the time. The block may be recent, or the engine may not be honouring it; check before changing anything.",
     "noDomain": "Add your brand's domain in the settings to measure when the AIs link your site, not just when they name you.",
     "promptGap": "You show up only {presence} of the time for «{prompt}». Publish a page that answers that question self-containedly (direct answer up top, concrete data, no fluff): the AIs recommend whoever appears in content that answers that exact question.",
     "linkedCitationLow": "On {engine} they name you but link your site only {citation} of the time. {engine} cites sources that answer the question clearly and with data; create or improve an answer-ready page on your site about those prompts and link it to move from mention to cited source.",

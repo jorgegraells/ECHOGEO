@@ -6,6 +6,17 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-16
 
+- **fix: las recomendaciones de bots bloqueados contradecían la medición**.
+  Jorge detectó que la prescripción decía "bloqueas OAI-SearchBot: por eso no
+  apareces en ChatGPT" mientras el desglose medía 100 % de presencia en
+  OpenAI. Dos errores: (1) el texto confundía **mención** con **cita
+  enlazada** —bloquear el bot impide que tu web sea fuente citada, no que el
+  modelo te nombre por lo que ya sabe—, y (2) la recomendación no cruzaba con
+  los datos medidos. Ahora el hallazgo se contrasta con el motor
+  correspondiente (`engineId` en el catálogo de bots): si ese motor no cita el
+  dominio, el bloqueo se presenta como causa raíz; si sí lo cita pese al
+  bloqueo, se reporta la contradicción para revisarla en vez de afirmar algo
+  falso. 3 tests nuevos que fijan el caso.
 - **Auditoría on-page integrada (Fase B)**: al medir, si hay dominio, se
   audita la web y se guarda `onpage.json` junto al crudo; un fallo de la web
   no tumba la medición. El detalle muestra la sección "Auditoría de tu web"
