@@ -65,10 +65,19 @@
     "runCited": "mención en posición {position}, con cita",
     "runMention": "mención en posición {position}, sin cita",
     "runAbsent": "sin mención",
+    "prescription": "Prescripción",
     "sources": "Fuentes citadas",
     "sourcesCount": { "one": "{count} dominio distinto", "other": "{count} dominios distintos" },
     "sourceRuns": "{count}/{total} pasadas",
     "sourcesEmpty": "El motor no devolvió fuentes en esta medición.",
     "ownDomain": "Tu dominio"
+  },
+  "recommendations": {
+    "noDomain": "Añade el dominio de tu marca para medir cuándo las IAs enlazan tu web, no solo cuándo te nombran.",
+    "promptGap": "Apareces solo el {presence} de las veces en «{prompt}». Es un hueco donde trabajar.",
+    "linkedCitationLow": "En {engine} te nombran pero solo enlazan tu web el {citation} de las veces. Consigue ser la fuente citada, no solo mencionada.",
+    "engineDivergence": "Tu visibilidad varía entre motores: {best} en {bestEngine} frente a {worst} en {worstEngine}. El trabajo está en {worstEngine}.",
+    "absentSource": "El motor cita {domain} en el {frequency} de las pasadas y no te incluye. Aparecer ahí subiría tu visibilidad.",
+    "positionLow": "Cuando apareces, sueles ir por detrás de otras marcas. Gana posición en las respuestas."
   }
 }

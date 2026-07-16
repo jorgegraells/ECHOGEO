@@ -62,6 +62,14 @@ verificables, sin romper el build entre uno y otro.
             OpenAI; Perplexity lo enlaza solo en el 50 % de las pasadas).
       - [ ] Mejora: el "Registro por prompt" mezcla las pasadas de todos los
             motores sin distinguirlos; agrupar los marcadores por motor.
+- [x] **Recomendaciones deterministas**: capa que deriva consejos
+      accionables de los datos de la medición (cita enlazada baja por motor,
+      huecos por prompt, divergencia entre motores, fuente ajena donde no
+      apareces, posición, falta de dominio). Sección "Prescripción" en el
+      detalle. Sin LLM, reproducible. Verificado con datos reales.
+- [ ] **Recomendaciones on-page**: las de verdad potentes (qué contenido
+      falta, cómo estructurar la web para ser citable) necesitan los checks
+      on-page (fetch de la web del cliente). Es el siguiente escalón.
 - [ ] Fórmula del Índice de Eco v1 con la varianza entre pasadas
       declarada en el propio índice, no solo en las métricas.
 - [x] Segundo motor (OpenAI Responses API) y tercer motor (Gemini con

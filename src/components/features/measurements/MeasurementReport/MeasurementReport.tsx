@@ -1,11 +1,13 @@
 import Link from 'next/link';
 
 import { getI18n } from '@/lib/i18n';
+import { buildRecommendations } from '@/lib/services/measurement';
 import type { MeasurementResult } from '@/lib/services/measurement';
 import { formatDateTime } from '@/lib/utils';
 
 import { EchoIndexPanel } from '../EchoIndexPanel';
 import { EngineBreakdown } from '../EngineBreakdown';
+import { Prescription } from '../Prescription';
 import { PromptLog } from '../PromptLog';
 import { SourceAudit } from '../SourceAudit';
 import { styles } from './MeasurementReport.styles';
@@ -21,6 +23,15 @@ export async function MeasurementReport({ result }: MeasurementReportProps) {
   const brand = file.config.brand;
   const register = t('common.register');
   const multiEngine = report.byEngine.length > 1;
+  const recommendations = buildRecommendations(file, report);
+
+  // Numeración de registros según qué secciones se muestran.
+  const pad = (n: number) => `${register} ${String(n).padStart(2, '0')}`;
+  let section = 0;
+  const engineReg = multiEngine ? pad(++section) : null;
+  const prescriptionReg = recommendations.length ? pad(++section) : null;
+  const promptReg = pad(++section);
+  const sourceReg = pad(++section);
 
   const meta =
     t('runDetail.queries', {
@@ -45,15 +56,14 @@ export async function MeasurementReport({ result }: MeasurementReportProps) {
       <p className={styles.meta}>{meta}</p>
 
       <EchoIndexPanel report={report} />
-      {multiEngine ? (
-        <EngineBreakdown byEngine={report.byEngine} register={`${register} 01`} />
+      {engineReg ? (
+        <EngineBreakdown byEngine={report.byEngine} register={engineReg} />
       ) : null}
-      <PromptLog report={report} register={`${register} ${multiEngine ? '02' : '01'}`} />
-      <SourceAudit
-        file={file}
-        report={report}
-        register={`${register} ${multiEngine ? '03' : '02'}`}
-      />
+      {prescriptionReg ? (
+        <Prescription recommendations={recommendations} register={prescriptionReg} />
+      ) : null}
+      <PromptLog report={report} register={promptReg} />
+      <SourceAudit file={file} report={report} register={sourceReg} />
     </div>
   );
 }

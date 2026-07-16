@@ -6,6 +6,16 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-16
 
+- **Recomendaciones deterministas ("Prescripción")**: capa nueva en el
+  servicio (`buildRecommendations`) que deriva consejos accionables de los
+  datos de la medición mediante reglas (cita enlazada baja por motor, hueco
+  por prompt, divergencia entre motores, fuente ajena donde no apareces,
+  posición baja, falta de dominio), con prioridad y códigos i18n. Sección
+  "Prescripción" en el detalle (`Prescription`). Sin LLM: reproducible y
+  sin coste. Verificado con la medición real de Nomad: generó "el trabajo
+  está en perplexity" (por el 8,5 vs 10,0) y "cita ineffablecoffee.com y no
+  te incluye". 6 tests. Las recomendaciones potentes de verdad
+  (qué cambiar en la web) necesitan los checks on-page, aún pendientes.
 - **Verificación multi-motor real (Perplexity + OpenAI)**: medición de
   Nomad Coffee en los dos motores a la vez. El desglose diverge de verdad:
   índice 8,5 en Perplexity vs 10,0 en OpenAI, porque Perplexity solo enlaza

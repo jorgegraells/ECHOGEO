@@ -7,6 +7,7 @@ export {
   runMeasurement,
 } from './measurement.service';
 export { scoreMeasurement } from './measurement.scoring';
+export { buildRecommendations } from './measurement.recommendations';
 export {
   measurementConfigSchema,
   measurementFileSchema,

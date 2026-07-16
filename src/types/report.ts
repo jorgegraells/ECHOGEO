@@ -25,6 +25,17 @@ export interface PromptScore {
   avgPosition: number | null;
 }
 
+/**
+ * Recomendación accionable derivada de los datos de una medición. No lleva
+ * el texto final (eso es i18n): lleva el `code` de la regla y los valores
+ * para interpolar, y una `priority` para ordenar (mayor = más importante).
+ */
+export interface Recommendation {
+  code: string;
+  priority: number;
+  values: Record<string, string | number>;
+}
+
 /** Puntuación agregada de un solo motor dentro de una medición. */
 export interface EngineReport {
   engine: string;

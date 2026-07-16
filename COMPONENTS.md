@@ -16,6 +16,7 @@ entidad propia lleva su `data-component` y se registra aquí.
 | `source-audit` | `src/components/features/measurements/SourceAudit` | Auditoría de fuentes citadas |
 | `measurement-form` | `src/components/features/measurements/MeasurementForm` | Formulario para crear y lanzar una medición |
 | `engine-breakdown` | `src/components/features/measurements/EngineBreakdown` | Desglose del Índice de Eco por motor |
+| `prescription` | `src/components/features/measurements/Prescription` | Recomendaciones accionables priorizadas |
 | `locale-switcher` | `src/components/shared/LocaleSwitcher` | Selector de idioma ES/EN de la cabecera |
 
 ## Cómo registrar uno

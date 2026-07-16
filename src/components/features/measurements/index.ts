@@ -2,6 +2,7 @@
 export { MeasurementList } from './MeasurementList';
 export { MeasurementReport } from './MeasurementReport';
 export { EngineBreakdown } from './EngineBreakdown';
+export { Prescription } from './Prescription';
 export { MeasurementForm } from './MeasurementForm';
 export type {
   CreateMeasurementAction,

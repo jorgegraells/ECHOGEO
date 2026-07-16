@@ -65,10 +65,19 @@
     "runCited": "mention at position {position}, cited",
     "runMention": "mention at position {position}, not cited",
     "runAbsent": "no mention",
+    "prescription": "Prescription",
     "sources": "Cited sources",
     "sourcesCount": { "one": "{count} distinct domain", "other": "{count} distinct domains" },
     "sourceRuns": "{count}/{total} runs",
     "sourcesEmpty": "The engine returned no sources for this measurement.",
     "ownDomain": "Your domain"
+  },
+  "recommendations": {
+    "noDomain": "Add your brand's domain to measure when the AIs link your site, not just when they name you.",
+    "promptGap": "You show up only {presence} of the time for «{prompt}». That's a gap to work on.",
+    "linkedCitationLow": "On {engine} they name you but link your site only {citation} of the time. Become the cited source, not just a mention.",
+    "engineDivergence": "Your visibility varies by engine: {best} on {bestEngine} versus {worst} on {worstEngine}. The work is on {worstEngine}.",
+    "absentSource": "The engine cites {domain} in {frequency} of the runs and leaves you out. Showing up there would lift your visibility.",
+    "positionLow": "When you do appear, you tend to trail other brands. Gain position in the answers."
   }
 }

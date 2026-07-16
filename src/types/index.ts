@@ -7,4 +7,10 @@ export type {
   MeasurementFile,
   RunRecord,
 } from './measurement';
-export type { EngineReport, PromptScore, Report, RunScore } from './report';
+export type {
+  EngineReport,
+  PromptScore,
+  Recommendation,
+  Report,
+  RunScore,
+} from './report';
