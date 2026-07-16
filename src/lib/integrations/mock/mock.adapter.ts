@@ -14,10 +14,14 @@ function hash(str: string): number {
   return h >>> 0;
 }
 
-/** Crea un adaptador simulado a partir de la config, para pruebas sin coste. */
-export function createMockAdapter(config: MeasurementConfig): EngineAdapter {
+/**
+ * Crea un adaptador simulado, para pruebas sin coste. El `id` permite
+ * simular varios motores a la vez (una medición mock con varios motores
+ * genera un byEngine con esos ids).
+ */
+export function createMockAdapter(config: MeasurementConfig, id = 'mock'): EngineAdapter {
   return {
-    id: 'mock',
+    id,
     async query(prompt, runIndex) {
       const seed = hash(`${prompt}::${runIndex}`);
       const brand = config.brand.name;

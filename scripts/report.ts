@@ -9,10 +9,12 @@ const pct = (v: number) => `${Math.round(v * 100)} %`;
 export function printReport(report: Report): void {
   const line = '─'.repeat(64);
   console.log(`\n${line}`);
-  console.log(`  ÍNDICE DE ECO · ${report.brand} · motor: ${report.engine}`);
+  console.log(
+    `  ÍNDICE DE ECO · ${report.brand} · motores: ${report.engines.join(', ')}`,
+  );
   console.log(line);
   console.log(
-    `  Índice compuesto      ${report.index10.toFixed(1).replace('.', ',')} / 10`,
+    `  Índice global         ${report.index10.toFixed(1).replace('.', ',')} / 10`,
   );
   console.log(
     `  Presencia             ${pct(report.presence)} de ${report.totalRuns} pasadas`,
@@ -21,6 +23,15 @@ export function printReport(report: Report): void {
   console.log(
     `  Posición (0-1)        ${report.positionScore.toFixed(2).replace('.', ',')}`,
   );
+  if (report.byEngine.length > 1) {
+    console.log(line);
+    for (const e of report.byEngine) {
+      console.log(
+        `  · ${e.engine.padEnd(12)} índice ${e.index10.toFixed(1).replace('.', ',')} · ` +
+          `presencia ${pct(e.presence)} · cita ${pct(e.domainCited)}`,
+      );
+    }
+  }
   console.log(line);
   for (const p of report.prompts) {
     const pos =

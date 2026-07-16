@@ -38,7 +38,7 @@ export async function MeasurementList({ items }: MeasurementListProps) {
                   {formatDateTime(file.createdAt, locale)}
                 </span>
                 <span className={styles.brand}>{file.config.brand.name}</span>
-                <span className={styles.engine}>{report.engine}</span>
+                <span className={styles.engine}>{report.engines.join(' · ')}</span>
                 <span className={styles.presence}>
                   {t('measurements.presence', {
                     value: formatPercent(report.presence, locale),

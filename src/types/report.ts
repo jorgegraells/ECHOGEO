@@ -25,17 +25,34 @@ export interface PromptScore {
   avgPosition: number | null;
 }
 
-/** Reporte completo de una medición: el Índice de Eco y su desglose. */
+/** Puntuación agregada de un solo motor dentro de una medición. */
+export interface EngineReport {
+  engine: string;
+  totalRuns: number;
+  presence: number;
+  domainCited: number;
+  positionScore: number;
+  index10: number;
+}
+
+/**
+ * Reporte completo de una medición. Las métricas de primer nivel son
+ * globales (agregadas sobre todos los motores medidos); `byEngine` lleva
+ * el desglose por motor, que es lo accionable.
+ */
 export interface Report {
   brand: string;
-  engine: string;
+  /** Motores medidos, en el orden en que aparecen en las pasadas */
+  engines: string[];
   totalRuns: number;
   presence: number;
   domainCited: number;
   /** 0..1, mejor cuanto más arriba aparece la marca */
   positionScore: number;
-  /** Índice compuesto 0..10 */
+  /** Índice compuesto global 0..10 */
   index10: number;
   prompts: PromptScore[];
   runScores: RunScore[];
+  /** Desglose del Índice de Eco por motor */
+  byEngine: EngineReport[];
 }

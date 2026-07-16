@@ -23,12 +23,13 @@ async function main(): Promise<void> {
   );
 
   const config = parseMeasurementConfig(JSON.parse(readFileSync(configPath, 'utf8')));
-  const engineLabel = useMock ? 'mock' : config.engine;
-  const total = config.prompts.length * config.runsPerPrompt;
+  const engineLabel = useMock ? 'mock' : config.engines.join(', ');
+  const total = config.prompts.length * config.runsPerPrompt * config.engines.length;
 
   console.log(
-    `Medición de «${config.brand.name}» · motor ${engineLabel} · ` +
-      `${config.prompts.length} prompts × ${config.runsPerPrompt} pasadas = ${total} consultas`,
+    `Medición de «${config.brand.name}» · motores ${engineLabel} · ` +
+      `${config.prompts.length} prompts × ${config.runsPerPrompt} pasadas × ` +
+      `${config.engines.length} motores = ${total} consultas`,
   );
   if (!useMock) console.log('Cada consulta gasta créditos de API.');
 

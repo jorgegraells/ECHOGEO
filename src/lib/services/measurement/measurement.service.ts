@@ -54,21 +54,22 @@ const REAL_ENGINES: Record<
   gemini: { envVar: 'GEMINI_API_KEY', create: (key) => createGeminiAdapter(key) },
 };
 
-/** Elige la integración según la config, o el mock si se pide. */
-function resolveAdapter(config: MeasurementConfig, useMock: boolean): EngineAdapter {
-  if (useMock || config.engine === 'mock') return createMockAdapter(config);
+/** Resuelve el adaptador de un motor concreto (o su mock si se pide). */
+function resolveAdapter(
+  engine: string,
+  config: MeasurementConfig,
+  useMock: boolean,
+): EngineAdapter {
+  if (useMock || engine === 'mock') return createMockAdapter(config, engine);
 
-  const engine = REAL_ENGINES[config.engine];
-  if (!engine) throw new UnknownEngineError(config.engine);
+  const def = REAL_ENGINES[engine];
+  if (!def) throw new UnknownEngineError(engine);
 
-  const key = process.env[engine.envVar];
+  const key = process.env[def.envVar];
   if (!key) {
-    throw new EngineNotConfiguredError(
-      config.engine,
-      `falta ${engine.envVar} en .env.local`,
-    );
+    throw new EngineNotConfiguredError(engine, `falta ${def.envVar} en .env.local`);
   }
-  return engine.create(key);
+  return def.create(key);
 }
 
 /**
@@ -79,26 +80,33 @@ export async function runMeasurement(
   config: MeasurementConfig,
   options: RunMeasurementOptions = {},
 ): Promise<MeasurementResult> {
-  const adapter = resolveAdapter(config, options.useMock ?? false);
-  const total = config.prompts.length * config.runsPerPrompt;
+  const useMock = options.useMock ?? false;
+  const adapters = config.engines.map((engine) =>
+    resolveAdapter(engine, config, useMock),
+  );
+  const total = config.prompts.length * config.runsPerPrompt * adapters.length;
   const runs: RunRecord[] = [];
   let done = 0;
 
-  for (let p = 0; p < config.prompts.length; p++) {
-    const prompt = config.prompts[p]!;
-    for (let r = 0; r < config.runsPerPrompt; r++) {
-      const answer = await adapter.query(prompt, r);
-      runs.push({
-        promptIndex: p,
-        prompt,
-        runIndex: r,
-        timestamp: new Date().toISOString(),
-        engine: adapter.id,
-        answer,
-      });
-      done++;
-      options.onProgress?.({ promptIndex: p, runIndex: r, total, done });
-      if (adapter.id !== 'mock') await delay(THROTTLE_MS);
+  // Cada motor se mide por separado; el crudo mezcla las pasadas de todos,
+  // etiquetadas con su motor. El scoring las separa luego en byEngine.
+  for (const adapter of adapters) {
+    for (let p = 0; p < config.prompts.length; p++) {
+      const prompt = config.prompts[p]!;
+      for (let r = 0; r < config.runsPerPrompt; r++) {
+        const answer = await adapter.query(prompt, r);
+        runs.push({
+          promptIndex: p,
+          prompt,
+          runIndex: r,
+          timestamp: new Date().toISOString(),
+          engine: adapter.id,
+          answer,
+        });
+        done++;
+        options.onProgress?.({ promptIndex: p, runIndex: r, total, done });
+        if (!useMock) await delay(THROTTLE_MS);
+      }
     }
   }
 
@@ -108,7 +116,7 @@ export async function runMeasurement(
     config,
     runs,
   };
-  const id = `${file.createdAt.replace(/[:.]/g, '-')}-${adapter.id}`;
+  const id = `${file.createdAt.replace(/[:.]/g, '-')}-${config.engines.join('-')}`;
 
   saveMeasurement(id, file);
   const report = scoreMeasurement(file);

@@ -50,6 +50,12 @@ verificables, sin romper el build entre uno y otro.
       medición síncrona; una medición real con muchos prompts tarda y no
       escala en producción. Mover a un job runner (Trigger.dev o Inngest)
       con estado "en curso / lista" en la UI.
+- [~] **Multi-motor** (una medición mide en varios motores a la vez):
+      - [x] Fase A (backend): `engines[]` en la config, scoring con índice
+            global + desglose `byEngine`, servicio que corre cada motor,
+            compatibilidad con crudos antiguos. Verificado con mock.
+      - [ ] Fase B (UI): formulario con checkboxes de motores y detalle con
+            el desglose por motor. Luego verificar con 2 motores reales.
 - [ ] Fórmula del Índice de Eco v1 con la varianza entre pasadas
       declarada en el propio índice, no solo en las métricas.
 - [x] Segundo motor (OpenAI Responses API) y tercer motor (Gemini con

@@ -14,7 +14,7 @@ function makeFile(
     competitors: [{ name: 'Globex' }, { name: 'Initech' }],
     prompts: ['¿mejor opción?'],
     runsPerPrompt: answers.length,
-    engine: 'test',
+    engines: ['test'],
     ...config,
   };
   const runs: RunRecord[] = answers.map((a, i) => ({
@@ -84,5 +84,56 @@ describe('scoreMeasurement', () => {
       { text: 'Acme lidera el sector.', citations: ['https://blog.acme.com/post'] },
     ]);
     expect(scoreMeasurement(file).runScores[0]?.domainCited).toBe(true);
+  });
+
+  it('desglosa el índice por motor y agrega el global', () => {
+    // Dos motores, una pasada cada uno: uno menciona la marca, el otro no.
+    const config: MeasurementConfig = {
+      brand: { name: 'Acme', domain: 'acme.com' },
+      competitors: [{ name: 'Globex' }],
+      prompts: ['¿mejor opción?'],
+      runsPerPrompt: 1,
+      engines: ['perplexity', 'openai'],
+    };
+    const base = {
+      promptIndex: 0,
+      prompt: '¿mejor opción?',
+      runIndex: 0,
+      timestamp: 'x',
+    };
+    const file: MeasurementFile = {
+      version: 1,
+      createdAt: 'x',
+      config,
+      runs: [
+        {
+          ...base,
+          engine: 'perplexity',
+          answer: {
+            text: 'Acme es la mejor.',
+            citations: ['https://acme.com'],
+            raw: null,
+          },
+        },
+        {
+          ...base,
+          engine: 'openai',
+          answer: { text: 'Recomiendo Globex.', citations: [], raw: null },
+        },
+      ],
+    };
+    const report = scoreMeasurement(file);
+
+    expect(report.engines).toEqual(['perplexity', 'openai']);
+    expect(report.totalRuns).toBe(2);
+    // Global: la marca aparece en 1 de 2 pasadas
+    expect(report.presence).toBe(0.5);
+    // Desglose: perplexity 100 % presencia, openai 0 %
+    expect(report.byEngine).toHaveLength(2);
+    const perplexity = report.byEngine.find((e) => e.engine === 'perplexity');
+    const openai = report.byEngine.find((e) => e.engine === 'openai');
+    expect(perplexity?.presence).toBe(1);
+    expect(openai?.presence).toBe(0);
+    expect(perplexity?.index10).toBeGreaterThan(openai?.index10 ?? 0);
   });
 });

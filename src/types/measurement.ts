@@ -21,8 +21,8 @@ export interface MeasurementConfig {
   prompts: string[];
   /** Pasadas por prompt: la respuesta de una IA cambia entre ejecuciones */
   runsPerPrompt: number;
-  /** Identificador del motor de IA ("perplexity" | "mock") */
-  engine: string;
+  /** Motores de IA a medir ("perplexity", "openai", "gemini", "mock") */
+  engines: string[];
 }
 
 /** Respuesta normalizada de un motor de IA, más su cuerpo crudo íntegro. */

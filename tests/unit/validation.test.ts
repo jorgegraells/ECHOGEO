@@ -14,7 +14,7 @@ function minimalConfig(): unknown {
     brand: { name: 'Acme' },
     prompts: ['¿mejor opción?'],
     runsPerPrompt: 1,
-    engine: 'mock',
+    engines: ['mock'],
   };
 }
 
@@ -25,9 +25,15 @@ describe('parseMeasurementConfig', () => {
     expect(config.brand.name).toBe('Acme');
     expect(config.prompts).toEqual(['¿mejor opción?']);
     expect(config.runsPerPrompt).toBe(1);
-    expect(config.engine).toBe('mock');
+    expect(config.engines).toEqual(['mock']);
     // El schema rellena competitors ausente con un array vacío.
     expect(config.competitors).toEqual([]);
+  });
+
+  it('normaliza el campo antiguo `engine` (string) a `engines`', () => {
+    const { engines: _omit, ...rest } = minimalConfig() as Record<string, unknown>;
+    const config = parseMeasurementConfig({ ...rest, engine: 'perplexity' });
+    expect(config.engines).toEqual(['perplexity']);
   });
 
   it('lanza InvalidConfigError con la marca vacía', () => {

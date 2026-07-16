@@ -1,4 +1,13 @@
-import type { BrandSpec, MeasurementFile, PromptScore, Report, RunScore } from '@/types';
+import type {
+  BrandSpec,
+  EngineReport,
+  MeasurementConfig,
+  MeasurementFile,
+  PromptScore,
+  Report,
+  RunRecord,
+  RunScore,
+} from '@/types';
 
 // Scoring determinista v0. La promesa del producto: con las mismas
 // respuestas crudas, el mismo resultado, siempre. Si esta fórmula cambia,
@@ -49,9 +58,19 @@ function domainInCitations(citations: string[], domain: string | undefined): boo
   });
 }
 
-/** Puntúa una medición a partir de su fichero crudo. Función pura. */
-export function scoreMeasurement(file: MeasurementFile): Report {
-  const { config, runs } = file;
+/** Métricas de un conjunto de pasadas, sin distinguir de qué motor son. */
+interface Metrics {
+  totalRuns: number;
+  presence: number;
+  domainCited: number;
+  positionScore: number;
+  index10: number;
+  prompts: PromptScore[];
+  runScores: RunScore[];
+}
+
+/** Calcula las métricas de la marca sobre un conjunto cualquiera de pasadas. */
+function computeMetrics(config: MeasurementConfig, runs: RunRecord[]): Metrics {
   const allBrands = [config.brand, ...config.competitors];
 
   const runScores: RunScore[] = runs.map((run) => {
@@ -105,10 +124,6 @@ export function scoreMeasurement(file: MeasurementFile): Report {
     Math.round(10 * (0.5 * presence + 0.3 * domainCited + 0.2 * positionScore) * 10) / 10;
 
   return {
-    brand: config.brand.name,
-    // El motor que respondió de verdad, no el configurado: una medición
-    // con --mock debe decir "mock" en el reporte
-    engine: runs[0]?.engine ?? config.engine,
     totalRuns: total,
     presence,
     domainCited,
@@ -116,5 +131,41 @@ export function scoreMeasurement(file: MeasurementFile): Report {
     index10,
     prompts,
     runScores,
+  };
+}
+
+/**
+ * Puntúa una medición a partir de su fichero crudo. Función pura. Devuelve
+ * las métricas globales (sobre todas las pasadas de todos los motores) y el
+ * desglose por motor en `byEngine`.
+ */
+export function scoreMeasurement(file: MeasurementFile): Report {
+  const { config, runs } = file;
+  const global = computeMetrics(config, runs);
+
+  // Motores en el orden en que aparecen en las pasadas del crudo.
+  const engines: string[] = [];
+  for (const run of runs) if (!engines.includes(run.engine)) engines.push(run.engine);
+
+  const byEngine: EngineReport[] = engines.map((engine) => {
+    const m = computeMetrics(
+      config,
+      runs.filter((run) => run.engine === engine),
+    );
+    return {
+      engine,
+      totalRuns: m.totalRuns,
+      presence: m.presence,
+      domainCited: m.domainCited,
+      positionScore: m.positionScore,
+      index10: m.index10,
+    };
+  });
+
+  return {
+    brand: config.brand.name,
+    engines: engines.length ? engines : config.engines,
+    ...global,
+    byEngine,
   };
 }

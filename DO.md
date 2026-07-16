@@ -4,6 +4,18 @@ Registro de lo cerrado, más reciente arriba. Al cerrar una tarea de
 [TODO.md](TODO.md), moverla aquí con fecha (YYYY-MM-DD) y una descripción
 breve. Lo hace el orquestador, nunca un subagente.
 
+## 2026-07-16
+
+- **Multi-motor, Fase A (backend)**: una medición pasa a medir en varios
+  motores a la vez. `MeasurementConfig.engine` → `engines[]`; el scoring da
+  un Índice de Eco global (sobre todas las pasadas de todos los motores) más
+  el desglose `byEngine`; el servicio corre cada motor y etiqueta cada
+  pasada. Compatibilidad hacia atrás: los crudos antiguos con `engine`
+  singular se leen igual (preprocess Zod). Verificado con mock de 3 motores
+  (18 pasadas, índice global + 3 byEngine) y el dashboard sigue renderizando.
+  La UI del desglose por motor y el formulario con checkboxes van en la
+  Fase B.
+
 ## 2026-07-15
 
 - **Verificación de motores contra API real**: OpenAI validado end-to-end

@@ -16,5 +16,5 @@
     "¿Qué tostadores de café de especialidad españoles merecen la pena?"
   ],
   "runsPerPrompt": 4,
-  "engine": "perplexity"
+  "engines": ["perplexity"]
 }

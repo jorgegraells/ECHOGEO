@@ -14,13 +14,32 @@ const brandSpecSchema = z.object({
   domain: z.string().optional(),
 });
 
-export const measurementConfigSchema = z.object({
+const configShape = z.object({
   brand: brandSpecSchema,
   competitors: z.array(brandSpecSchema).default([]),
   prompts: z.array(z.string().min(1)).min(1),
   runsPerPrompt: z.number().int().min(1),
-  engine: z.string().min(1),
+  engines: z.array(z.string().min(1)).min(1),
 });
+
+/**
+ * Config de medición. El preprocess da compatibilidad hacia atrás: las
+ * mediciones y configs antiguas traían `engine` (string único); se
+ * normalizan a `engines: [engine]` para poder releerlas sin migrar el disco.
+ */
+export const measurementConfigSchema = z.preprocess((value) => {
+  if (
+    value &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    !('engines' in value) &&
+    'engine' in value
+  ) {
+    const { engine, ...rest } = value as Record<string, unknown>;
+    return { ...rest, engines: [engine] };
+  }
+  return value;
+}, configShape);
 
 const engineAnswerSchema = z.object({
   text: z.string(),

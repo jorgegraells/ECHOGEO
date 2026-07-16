@@ -36,7 +36,7 @@ export async function MeasurementReport({ result }: MeasurementReportProps) {
         ·{' '}
         {t('runDetail.crumb', {
           date: formatDateTime(file.createdAt, locale),
-          engine: report.engine,
+          engine: report.engines.join(' · '),
         })}
       </p>
       <h1 className={styles.title}>{brand.name}</h1>
