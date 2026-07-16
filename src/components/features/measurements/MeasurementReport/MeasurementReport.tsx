@@ -5,6 +5,7 @@ import type { MeasurementResult } from '@/lib/services/measurement';
 import { formatDateTime } from '@/lib/utils';
 
 import { EchoIndexPanel } from '../EchoIndexPanel';
+import { EngineBreakdown } from '../EngineBreakdown';
 import { PromptLog } from '../PromptLog';
 import { SourceAudit } from '../SourceAudit';
 import { styles } from './MeasurementReport.styles';
@@ -19,6 +20,7 @@ export async function MeasurementReport({ result }: MeasurementReportProps) {
   const { file, report } = result;
   const brand = file.config.brand;
   const register = t('common.register');
+  const multiEngine = report.byEngine.length > 1;
 
   const meta =
     t('runDetail.queries', {
@@ -43,8 +45,15 @@ export async function MeasurementReport({ result }: MeasurementReportProps) {
       <p className={styles.meta}>{meta}</p>
 
       <EchoIndexPanel report={report} />
-      <PromptLog report={report} register={`${register} 01`} />
-      <SourceAudit file={file} report={report} register={`${register} 02`} />
+      {multiEngine ? (
+        <EngineBreakdown byEngine={report.byEngine} register={`${register} 01`} />
+      ) : null}
+      <PromptLog report={report} register={`${register} ${multiEngine ? '02' : '01'}`} />
+      <SourceAudit
+        file={file}
+        report={report}
+        register={`${register} ${multiEngine ? '03' : '02'}`}
+      />
     </div>
   );
 }

@@ -10,6 +10,10 @@ export const styles = {
   textarea:
     'min-h-24 rounded-[2px] border border-ink-faint bg-panel px-3 py-2 font-body text-ink outline-none focus-visible:border-signal',
   row: 'grid gap-6 sm:grid-cols-2',
+  engines: 'flex flex-wrap gap-x-6 gap-y-2',
+  engineOption: 'flex items-center gap-2 text-[15px]',
+  checkbox: 'h-4 w-4 accent-[var(--color-signal)]',
+  mockRow: 'flex w-fit items-center gap-2 text-[15px]',
   warning: 'font-mono text-xs text-alarm',
   error:
     'rounded-[2px] border border-l-2 border-ink-faint border-l-alarm bg-panel px-4 py-3 text-alarm',

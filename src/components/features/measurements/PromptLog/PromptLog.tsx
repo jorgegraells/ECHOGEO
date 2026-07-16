@@ -47,9 +47,11 @@ export async function PromptLog({ report, register }: PromptLogProps) {
                 </p>
               </div>
               <div className={styles.dots}>
-                {scores.map((score) => (
+                {/* Con varios motores hay una pasada por motor con el mismo
+                    runIndex, así que el índice del map desambigua el key. */}
+                {scores.map((score, i) => (
                   <span
-                    key={score.runIndex}
+                    key={`${score.runIndex}-${i}`}
                     title={dotTooltip(score, t)}
                     className={dotClassName(score)}
                   >

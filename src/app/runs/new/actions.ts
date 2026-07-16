@@ -28,7 +28,7 @@ export async function createMeasurement(
   formData: FormData,
 ): Promise<CreateMeasurementState> {
   const { t } = await getI18n();
-  const engine = String(formData.get('engine') ?? 'mock');
+  const useMock = formData.get('mock') === 'on';
 
   const parsed = measurementConfigSchema.safeParse({
     brand: {
@@ -39,7 +39,7 @@ export async function createMeasurement(
     competitors: splitList(formData.get('competitors'), 'line').map((name) => ({ name })),
     prompts: splitList(formData.get('prompts'), 'line'),
     runsPerPrompt: Number(formData.get('runs') ?? 3),
-    engine,
+    engines: formData.getAll('engines').map(String),
   });
 
   if (!parsed.success) {
@@ -48,9 +48,9 @@ export async function createMeasurement(
 
   let id: string;
   try {
-    // .env.local lo carga Next automáticamente, así que el motor real
-    // encuentra su clave sin llamar a loadEnvLocal.
-    const result = await runMeasurement(parsed.data, { useMock: engine === 'mock' });
+    // .env.local lo carga Next automáticamente, así que los motores reales
+    // encuentran su clave sin llamar a loadEnvLocal.
+    const result = await runMeasurement(parsed.data, { useMock });
     id = result.id;
   } catch (err) {
     const detail = err instanceof MeasurementError ? err.message : String(err);

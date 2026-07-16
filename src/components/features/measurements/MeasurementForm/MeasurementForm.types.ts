@@ -24,11 +24,10 @@ export interface MeasurementFormLabels {
   promptsHint: string;
   runsLabel: string;
   runsHint: string;
-  engineLabel: string;
-  engineMock: string;
-  enginePerplexity: string;
-  engineOpenai: string;
-  engineGemini: string;
+  enginesLabel: string;
+  enginesHint: string;
+  mockLabel: string;
+  mockHint: string;
   realWarning: string;
   submit: string;
   submitting: string;

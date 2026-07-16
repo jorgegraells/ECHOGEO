@@ -16,6 +16,14 @@ interface MeasurementFormProps {
 
 const initialState: CreateMeasurementState = { status: 'idle' };
 
+// Motores ofrecidos en el formulario. Los nombres son marcas propias, no
+// texto traducible. Los ids coinciden con los del servicio.
+const AVAILABLE_ENGINES = [
+  { id: 'perplexity', name: 'Perplexity' },
+  { id: 'openai', name: 'OpenAI' },
+  { id: 'gemini', name: 'Gemini' },
+] as const;
+
 /** Formulario para definir y lanzar una medición desde la web. */
 export function MeasurementForm({ action, labels }: MeasurementFormProps) {
   const [state, formAction, pending] = useActionState(action, initialState);
@@ -75,34 +83,48 @@ export function MeasurementForm({ action, labels }: MeasurementFormProps) {
         <span className={styles.hint}>{labels.promptsHint}</span>
       </div>
 
-      <div className={styles.row}>
-        <div className={styles.field}>
-          <label htmlFor="runs" className={styles.label}>
-            {labels.runsLabel}
-          </label>
-          <input
-            id="runs"
-            name="runs"
-            type="number"
-            min={1}
-            max={10}
-            defaultValue={3}
-            className={styles.input}
-          />
-          <span className={styles.hint}>{labels.runsHint}</span>
+      <div className={styles.field}>
+        <label htmlFor="runs" className={styles.label}>
+          {labels.runsLabel}
+        </label>
+        <input
+          id="runs"
+          name="runs"
+          type="number"
+          min={1}
+          max={10}
+          defaultValue={3}
+          className={styles.input}
+        />
+        <span className={styles.hint}>{labels.runsHint}</span>
+      </div>
+
+      <fieldset className={styles.field}>
+        <legend className={styles.label}>{labels.enginesLabel}</legend>
+        <div className={styles.engines}>
+          {AVAILABLE_ENGINES.map((engine) => (
+            <label key={engine.id} className={styles.engineOption}>
+              <input
+                type="checkbox"
+                name="engines"
+                value={engine.id}
+                defaultChecked={engine.id === 'perplexity'}
+                className={styles.checkbox}
+              />
+              {engine.name}
+            </label>
+          ))}
         </div>
-        <div className={styles.field}>
-          <label htmlFor="engine" className={styles.label}>
-            {labels.engineLabel}
-          </label>
-          <select id="engine" name="engine" defaultValue="mock" className={styles.input}>
-            <option value="mock">{labels.engineMock}</option>
-            <option value="perplexity">{labels.enginePerplexity}</option>
-            <option value="openai">{labels.engineOpenai}</option>
-            <option value="gemini">{labels.engineGemini}</option>
-          </select>
-          <span className={styles.warning}>{labels.realWarning}</span>
-        </div>
+        <span className={styles.hint}>{labels.enginesHint}</span>
+      </fieldset>
+
+      <div className={styles.field}>
+        <label className={styles.mockRow}>
+          <input type="checkbox" name="mock" defaultChecked className={styles.checkbox} />
+          {labels.mockLabel}
+        </label>
+        <span className={styles.hint}>{labels.mockHint}</span>
+        <span className={styles.warning}>{labels.realWarning}</span>
       </div>
 
       {state.status === 'error' ? <p className={styles.error}>{state.message}</p> : null}

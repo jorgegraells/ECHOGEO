@@ -6,6 +6,14 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-16
 
+- **Multi-motor, Fase B (UI)**: el formulario pasa a checkboxes de motores
+  (Perplexity/OpenAI/Gemini) más un toggle "Simular (sin coste)"; el detalle
+  añade el desglose por motor (`EngineBreakdown`), que solo aparece si se
+  midió en más de un motor. Verificado en navegador: creación multi-motor
+  desde el formulario → detalle con índice global + desglose por los 3
+  motores; con un solo motor el desglose no aparece. Arreglado de paso un
+  key de React duplicado en el registro por prompt (varias pasadas con el
+  mismo runIndex al haber varios motores).
 - **Multi-motor, Fase A (backend)**: una medición pasa a medir en varios
   motores a la vez. `MeasurementConfig.engine` → `engines[]`; el scoring da
   un Índice de Eco global (sobre todas las pasadas de todos los motores) más

@@ -54,8 +54,12 @@ verificables, sin romper el build entre uno y otro.
       - [x] Fase A (backend): `engines[]` en la config, scoring con índice
             global + desglose `byEngine`, servicio que corre cada motor,
             compatibilidad con crudos antiguos. Verificado con mock.
-      - [ ] Fase B (UI): formulario con checkboxes de motores y detalle con
-            el desglose por motor. Luego verificar con 2 motores reales.
+      - [x] Fase B (UI): formulario con checkboxes de motores + toggle
+            simular; detalle con desglose `EngineBreakdown` (solo si hay
+            más de un motor). Verificado en navegador con mock de 3 motores.
+      - [ ] Verificar multi-motor real con 2 motores (Perplexity + OpenAI).
+      - [ ] Mejora: el "Registro por prompt" mezcla las pasadas de todos los
+            motores sin distinguirlos; agrupar los marcadores por motor.
 - [ ] Fórmula del Índice de Eco v1 con la varianza entre pasadas
       declarada en el propio índice, no solo en las métricas.
 - [x] Segundo motor (OpenAI Responses API) y tercer motor (Gemini con
