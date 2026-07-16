@@ -61,6 +61,8 @@ export const measurementFileSchema = z.object({
   createdAt: z.string(),
   config: measurementConfigSchema,
   runs: z.array(runRecordSchema),
+  // Opcional: las mediciones anteriores a este campo se leen igual.
+  failures: z.array(z.object({ engine: z.string(), message: z.string() })).optional(),
 });
 
 /** Valida una config de entrada; lanza InvalidConfigError si no cuadra. */

@@ -6,6 +6,7 @@ import type { CreateMeasurementState } from '@/components/features/measurements'
 import { getI18n } from '@/lib/i18n';
 import {
   applySize,
+  DEFAULT_ENGINES,
   isMeasurementSize,
   MEASUREMENT_SIZES,
   measurementConfigSchema,
@@ -31,7 +32,6 @@ export async function createMeasurement(
   formData: FormData,
 ): Promise<CreateMeasurementState> {
   const { t } = await getI18n();
-  const useMock = formData.get('mock') === 'on';
 
   // El tamaño contratado manda: fija las pasadas y limita los prompts. Lo
   // aplica el servidor, no el formulario, que solo acompaña al usuario.
@@ -50,7 +50,9 @@ export async function createMeasurement(
     competitors: splitList(formData.get('competitors'), 'line').map((name) => ({ name })),
     prompts: splitList(formData.get('prompts'), 'line'),
     runsPerPrompt: size.runsPerPrompt,
-    engines: formData.getAll('engines').map(String),
+    // Los motores no los elige el cliente: se mide en los tres, que es lo
+    // que se cobra por pregunta.
+    engines: [...DEFAULT_ENGINES],
   });
 
   if (!parsed.success) {
@@ -62,7 +64,7 @@ export async function createMeasurement(
     // .env.local lo carga Next automáticamente, así que los motores reales
     // encuentran su clave sin llamar a loadEnvLocal.
     const config = applySize(parsed.data, size);
-    const result = await runMeasurement(config, { useMock });
+    const result = await runMeasurement(config);
     id = result.id;
   } catch (err) {
     const detail = err instanceof MeasurementError ? err.message : String(err);

@@ -19,22 +19,19 @@ interface MeasurementFormProps {
 
 const initialState: CreateMeasurementState = { status: 'idle' };
 
-// Motores ofrecidos en el formulario. Los nombres son marcas propias, no
-// texto traducible. Los ids coinciden con los del servicio.
-const AVAILABLE_ENGINES = [
-  { id: 'perplexity', name: 'Perplexity' },
-  { id: 'openai', name: 'OpenAI' },
-  { id: 'gemini', name: 'Gemini' },
-] as const;
-
-/** Formulario para definir y lanzar una medición desde la web. */
+/**
+ * Formulario para definir y lanzar una medición desde la web. Los motores no
+ * se eligen (van los tres, que es lo que se cobra) ni hay modo simulado: eso
+ * es una herramienta de desarrollo, no de producto.
+ */
 export function MeasurementForm({ action, labels, sizes }: MeasurementFormProps) {
   const [state, formAction, pending] = useActionState(action, initialState);
   const [sizeId, setSizeId] = useState(sizes[0]?.id ?? '');
-  const [promptCount, setPromptCount] = useState(0);
+  const [promptsText, setPromptsText] = useState('');
 
   const size = sizes.find((s) => s.id === sizeId) ?? sizes[0];
   const maxPrompts = size?.maxPrompts ?? 0;
+  const promptCount = countPrompts(promptsText);
   const overLimit = promptCount > maxPrompts;
 
   return (
@@ -108,11 +105,14 @@ export function MeasurementForm({ action, labels, sizes }: MeasurementFormProps)
         <label htmlFor="prompts" className={styles.label}>
           {labels.promptsLabel}
         </label>
+        {/* Controlado: si el navegador restaura el formulario, el contador
+            no puede quedarse desincronizado con lo que se ve escrito. */}
         <textarea
           id="prompts"
           name="prompts"
           required
-          onChange={(e) => setPromptCount(countPrompts(e.target.value))}
+          value={promptsText}
+          onChange={(e) => setPromptsText(e.target.value)}
           className={styles.textarea}
         />
         <span className={styles.hint}>{labels.promptsHint}</span>
@@ -124,33 +124,7 @@ export function MeasurementForm({ action, labels, sizes }: MeasurementFormProps)
         </span>
       </div>
 
-      <fieldset className={styles.field}>
-        <legend className={styles.label}>{labels.enginesLabel}</legend>
-        <div className={styles.engines}>
-          {AVAILABLE_ENGINES.map((engine) => (
-            <label key={engine.id} className={styles.engineOption}>
-              <input
-                type="checkbox"
-                name="engines"
-                value={engine.id}
-                defaultChecked={engine.id === 'perplexity'}
-                className={styles.checkbox}
-              />
-              {engine.name}
-            </label>
-          ))}
-        </div>
-        <span className={styles.hint}>{labels.enginesHint}</span>
-      </fieldset>
-
-      <div className={styles.field}>
-        <label className={styles.mockRow}>
-          <input type="checkbox" name="mock" defaultChecked className={styles.checkbox} />
-          {labels.mockLabel}
-        </label>
-        <span className={styles.hint}>{labels.mockHint}</span>
-        <span className={styles.warning}>{labels.realWarning}</span>
-      </div>
+      <p className={styles.warning}>{labels.realWarning}</p>
 
       {state.status === 'error' ? <p className={styles.error}>{state.message}</p> : null}
 

@@ -73,6 +73,21 @@ export async function MeasurementReport({ result }: MeasurementReportProps) {
       <h1 className={styles.title}>{brand.name}</h1>
       <p className={styles.meta}>{meta}</p>
 
+      {/* Un motor que no respondió se dice claramente: su ausencia no
+          significa que la marca no aparezca en él. */}
+      {file.failures && file.failures.length > 0 ? (
+        <div className={styles.failures}>
+          {file.failures.map((failure) => (
+            <p key={failure.engine} className={styles.failure}>
+              {t('runDetail.engineFailed', {
+                engine: failure.engine,
+                message: failure.message,
+              })}
+            </p>
+          ))}
+        </div>
+      ) : null}
+
       <EchoIndexPanel report={report} />
       {engineReg ? (
         <EngineBreakdown byEngine={report.byEngine} register={engineReg} />

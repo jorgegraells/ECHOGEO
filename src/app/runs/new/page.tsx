@@ -30,10 +30,6 @@ export default async function NewMeasurementPage() {
     sizeHint: t('newMeasurement.sizeHint', {
       runs: MEASUREMENT_SIZES.basic.runsPerPrompt,
     }),
-    enginesLabel: t('newMeasurement.enginesLabel'),
-    enginesHint: t('newMeasurement.enginesHint'),
-    mockLabel: t('newMeasurement.mockLabel'),
-    mockHint: t('newMeasurement.mockHint'),
     realWarning: t('newMeasurement.realWarning'),
     submit: t('newMeasurement.submit'),
     submitting: t('newMeasurement.submitting'),

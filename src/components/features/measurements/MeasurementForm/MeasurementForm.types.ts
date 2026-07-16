@@ -34,10 +34,6 @@ export interface MeasurementFormLabels {
   promptsOverLimit: string;
   sizeLabel: string;
   sizeHint: string;
-  enginesLabel: string;
-  enginesHint: string;
-  mockLabel: string;
-  mockHint: string;
   realWarning: string;
   submit: string;
   submitting: string;

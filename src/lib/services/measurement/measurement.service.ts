@@ -7,6 +7,7 @@ import {
 import { auditDomain, type OnPageAudit } from '@/lib/services/onpage';
 import type {
   EngineAdapter,
+  EngineFailure,
   MeasurementConfig,
   MeasurementFile,
   Report,
@@ -14,6 +15,7 @@ import type {
 } from '@/types';
 
 import {
+  AllEnginesFailedError,
   EngineNotConfiguredError,
   MeasurementNotFoundError,
   UnknownEngineError,
@@ -40,6 +42,42 @@ const THROTTLE_MS = 400;
 const ID_PATTERN = /^[A-Za-z0-9._-]+$/;
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Longitud máxima del motivo de un fallo: esto lo lee un cliente. */
+const FAILURE_MESSAGE_MAX = 200;
+
+/**
+ * Convierte el error de un motor en un motivo legible. Las APIs devuelven el
+ * cuerpo del error entero (JSON de varias líneas); aquí se rescata solo el
+ * mensaje, porque el volcado crudo no le dice nada a quien lee el informe.
+ */
+function failureMessage(err: unknown): string {
+  const raw = err instanceof Error ? err.message : String(err);
+  const jsonStart = raw.indexOf('{');
+  if (jsonStart === -1) return raw.slice(0, FAILURE_MESSAGE_MAX);
+
+  const prefix = raw.slice(0, jsonStart).trim();
+  const body = raw.slice(jsonStart);
+
+  try {
+    const parsed: unknown = JSON.parse(body);
+    const detail =
+      parsed && typeof parsed === 'object'
+        ? ((parsed as { error?: { message?: unknown }; message?: unknown }).error
+            ?.message ?? (parsed as { message?: unknown }).message)
+        : undefined;
+    if (typeof detail === 'string') {
+      return `${prefix} ${detail}`.trim().slice(0, FAILURE_MESSAGE_MAX);
+    }
+  } catch {
+    // El cuerpo del error llega truncado por el adaptador, así que casi nunca
+    // parsea: se rescata el mensaje del texto tal cual.
+    const match = /"message"\s*:\s*"([^"]+)"/.exec(body);
+    if (match?.[1]) return `${prefix} ${match[1]}`.trim().slice(0, FAILURE_MESSAGE_MAX);
+  }
+
+  return raw.slice(0, FAILURE_MESSAGE_MAX);
+}
 
 /**
  * Audita la web de la marca sin que un fallo tumbe la medición: si la web no
@@ -97,33 +135,45 @@ export async function runMeasurement(
   options: RunMeasurementOptions = {},
 ): Promise<MeasurementResult> {
   const useMock = options.useMock ?? false;
-  const adapters = config.engines.map((engine) =>
-    resolveAdapter(engine, config, useMock),
-  );
-  const total = config.prompts.length * config.runsPerPrompt * adapters.length;
+  const total = config.prompts.length * config.runsPerPrompt * config.engines.length;
   const runs: RunRecord[] = [];
+  const failures: EngineFailure[] = [];
   let done = 0;
 
   // Cada motor se mide por separado; el crudo mezcla las pasadas de todos,
   // etiquetadas con su motor. El scoring las separa luego en byEngine.
-  for (const adapter of adapters) {
-    for (let p = 0; p < config.prompts.length; p++) {
-      const prompt = config.prompts[p]!;
-      for (let r = 0; r < config.runsPerPrompt; r++) {
-        const answer = await adapter.query(prompt, r);
-        runs.push({
-          promptIndex: p,
-          prompt,
-          runIndex: r,
-          timestamp: new Date().toISOString(),
-          engine: adapter.id,
-          answer,
-        });
-        done++;
-        options.onProgress?.({ promptIndex: p, runIndex: r, total, done });
-        if (!useMock) await delay(THROTTLE_MS);
+  //
+  // Un motor que falla (sin cuota, caído, sin clave) NO tumba la medición:
+  // se anota el motivo y se sigue con el resto. Lo ya consultado está pagado
+  // y sigue siendo válido; perderlo entero por un motor sería absurdo.
+  for (const engine of config.engines) {
+    try {
+      const adapter = resolveAdapter(engine, config, useMock);
+      for (let p = 0; p < config.prompts.length; p++) {
+        const prompt = config.prompts[p]!;
+        for (let r = 0; r < config.runsPerPrompt; r++) {
+          const answer = await adapter.query(prompt, r);
+          runs.push({
+            promptIndex: p,
+            prompt,
+            runIndex: r,
+            timestamp: new Date().toISOString(),
+            engine: adapter.id,
+            answer,
+          });
+          done++;
+          options.onProgress?.({ promptIndex: p, runIndex: r, total, done });
+          if (!useMock) await delay(THROTTLE_MS);
+        }
       }
+    } catch (err) {
+      failures.push({ engine, message: failureMessage(err) });
     }
+  }
+
+  // Si no respondió ni un motor no hay medición que guardar.
+  if (runs.length === 0) {
+    throw new AllEnginesFailedError(failures.map((f) => f.engine));
   }
 
   const file: MeasurementFile = {
@@ -131,6 +181,7 @@ export async function runMeasurement(
     createdAt: new Date().toISOString(),
     config,
     runs,
+    ...(failures.length > 0 ? { failures } : {}),
   };
   const id = `${file.createdAt.replace(/[:.]/g, '-')}-${config.engines.join('-')}`;
 

@@ -41,6 +41,16 @@ export class EngineNotConfiguredError extends MeasurementError {
   }
 }
 
+/** Ningún motor pudo responder: no hay medición que guardar. */
+export class AllEnginesFailedError extends MeasurementError {
+  readonly code = 'MEASUREMENT_ALL_ENGINES_FAILED';
+
+  constructor(readonly engines: string[]) {
+    super(`Ningún motor pudo responder (${engines.join(', ')})`);
+    this.name = 'AllEnginesFailedError';
+  }
+}
+
 /** No existe una medición guardada con ese identificador. */
 export class MeasurementNotFoundError extends MeasurementError {
   readonly code = 'MEASUREMENT_NOT_FOUND';

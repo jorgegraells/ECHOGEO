@@ -13,6 +13,7 @@ export type { CostBasis, EngineCost, MeasurementCost } from './measurement.cost'
 export {
   applySize,
   countQueries,
+  DEFAULT_ENGINES,
   isMeasurementSize,
   MEASUREMENT_SIZES,
 } from './measurement.plans';
@@ -24,6 +25,7 @@ export {
   parseMeasurementFile,
 } from './measurement.validation';
 export {
+  AllEnginesFailedError,
   EngineNotConfiguredError,
   InvalidConfigError,
   MeasurementError,

@@ -6,6 +6,13 @@ import { InvalidConfigError } from './measurement.errors';
 // precios no se guardan en el repositorio (es público) ni en el código, sino
 // en la pasarela de pago, que además permite cambiarlos sin desplegar.
 
+/**
+ * Motores de toda medición vendida. No se eligen: el precio va por pregunta
+ * medida en los tres, así que dejar quitar motores solo confundiría sin
+ * abaratar nada al cliente.
+ */
+export const DEFAULT_ENGINES = ['perplexity', 'openai', 'gemini'] as const;
+
 export type MeasurementSizeId = 'basic' | 'medium' | 'full';
 
 export interface MeasurementSize {

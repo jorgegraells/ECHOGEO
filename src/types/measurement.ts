@@ -50,10 +50,22 @@ export interface RunRecord {
   answer: EngineAnswer;
 }
 
+/** Motor que no se pudo medir, con el motivo. */
+export interface EngineFailure {
+  engine: string;
+  message: string;
+}
+
 /** Fichero de medición: config + todas las respuestas crudas de las pasadas. */
 export interface MeasurementFile {
   version: 1;
   createdAt: string;
   config: MeasurementConfig;
   runs: RunRecord[];
+  /**
+   * Motores que fallaron. Se guardan para que el boletín pueda decir que a
+   * ese motor no se le pudo preguntar, en vez de dar a entender que la marca
+   * no aparece en él.
+   */
+  failures?: EngineFailure[];
 }

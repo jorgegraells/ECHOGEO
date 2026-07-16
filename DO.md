@@ -6,6 +6,20 @@ breve. Lo hace el orquestador, nunca un subagente.
 
 ## 2026-07-16
 
+- **El formulario ya no elige motores ni simula**: se mide siempre en los
+  tres (es lo que se cobra por pregunta, así que elegir no abarataba nada) y
+  el modo simulado sale de la UI (es herramienta de desarrollo, queda en el
+  CLI con `--mock`). El textarea pasa a estar controlado para que el contador
+  no se desincronice si el navegador restaura el formulario.
+- **Un motor caído ya no tumba la medición**: al forzar los tres motores,
+  Gemini (sin cuota) habría hecho fallar todas las mediciones **después** de
+  pagar Perplexity y OpenAI. Ahora el fallo se anota en `failures` del crudo,
+  el informe sale con los motores que respondieron y el boletín avisa de que
+  a ese motor no se le pudo preguntar (para no dar a entender que la marca no
+  aparece en él). Si no responde ninguno, `AllEnginesFailedError`. El motivo
+  del fallo se limpia: se rescata el mensaje de la API en vez de volcar su
+  JSON. Verificado con una medición real: Perplexity y OpenAI completaron,
+  Gemini quedó anotado con su 429 legible.
 - **Tamaños de medición** (`measurement.plans.ts`): básica, media y completa,
   con su límite de preguntas y las pasadas fijas (no se recortan para
   abaratar: son la garantía de varianza). El formulario ofrece el tamaño y

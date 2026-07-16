@@ -3,6 +3,7 @@ export type {
   BrandSpec,
   EngineAdapter,
   EngineAnswer,
+  EngineFailure,
   MeasurementConfig,
   MeasurementFile,
   RunRecord,
